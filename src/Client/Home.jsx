@@ -7,9 +7,9 @@ import DataProfile from '../Components/Body-section/DataProfileMAN1/DataProfile'
 const Home = () => {
 
     return (
-        <div className='App'>
+        <div>
             <Header />
-            <main className='w-full h-[200vh] w-full max-w-[67.5rem] m-auto p-[16px] flex flex-col gap-[12px]'>
+            <main className='w-full h-[200vh] w-full max-w-[67.5rem] m-auto p-[16px] flex flex-col gap-[12px] '>
                 <div>
                     <LandingPage />
                 </div>
@@ -19,7 +19,6 @@ const Home = () => {
                 <div>
                     <DataProfile />
                 </div>
-
             </main>
         </div>
     )

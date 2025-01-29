@@ -87,7 +87,7 @@ const Header = () => {
                             <li>Tentang</li>
                             <li>Kontak</li>
                             <li>Lokasi</li>
-                            <li onClick={() => navigateTo('/Pendaftaran-SNPDB')}><span className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-lg text-white hover:bg-[var(--second-aksen)] font-semibold'>Pendaftaran SNPDB</span></li>
+                            <li onClick={() => navigateTo('/Pendaftaran-SNPDB')}><span className='bg-[var(--card)] px-[16px] py-[12px] rounded-xl text-[var(--text-primary)] hover:bg-[var(--second-aksen)] font-bold'>Log In</span></li>
                         </ul>
                     )}
                 </div>
