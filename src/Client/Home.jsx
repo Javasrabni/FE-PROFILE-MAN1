@@ -1,0 +1,28 @@
+import React, { useEffect, useState } from 'react'
+import Header from '../Components/Navbar/Header'
+import LandingPage from '../Components/Body-section/Landing/LandingPage'
+import NewsPart from '../Components/Body-section/News/NewsPart'
+import DataProfile from '../Components/Body-section/DataProfileMAN1/DataProfile'
+
+const Home = () => {
+
+    return (
+        <div className='App'>
+            <Header />
+            <main className='w-full h-[200vh] w-full max-w-[67.5rem] m-auto p-[16px] flex flex-col gap-[12px]'>
+                <div>
+                    <LandingPage />
+                </div>
+                <div>
+                    <NewsPart />
+                </div>
+                <div>
+                    <DataProfile />
+                </div>
+
+            </main>
+        </div>
+    )
+}
+
+export default Home

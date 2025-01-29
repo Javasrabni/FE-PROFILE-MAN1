@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'lexend', sans-serif;
+}
+
+:root {
+  /* --warna-aksen: #16A34A; */
+  --warna-aksen: #38E078;
+  --second-aksen: #7CE87C;
+
+  /* Accent/Interactive Colors */
+  --accent: #3b82f6;
+  /* Blue-500 */
+  --accent-hover: #2563eb;
+  /* Blue-600 */
+
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  /* White */
+  --bg-secondary: #f9fafb;
+  /* Gray-50 */
+
+  /* Text Colors */
+  --text-primary: #141414;
+  /* Gray-700 */
+  --text-secondary: #737373;
+  /* Gray-500 */
+
+  /* Border Colors */
+  --border: #E5E8EB;
+  /* Gray-300 */
+
+}
