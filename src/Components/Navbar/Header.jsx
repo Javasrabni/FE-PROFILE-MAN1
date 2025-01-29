@@ -60,7 +60,7 @@ const Header = () => {
                         />
                     </div>
                     <span className="flex flex-col gap-[2px] sm:gap-0 leading-none sm:leading-none">
-                        <p className="text-sm sm:text-base font-bold font-[lexend] m-0 p-0 leading-[1]">
+                        <p className="text-sm sm:text-sm font-bold font-[lexend] m-0 p-0 leading-[1]">
                             MAN 1 KOTA TANGERANG
                         </p>
                         {HeaderWidth <= 640 && (
@@ -78,13 +78,11 @@ const Header = () => {
                     {/* JIKA CLIENT WIDTH < 800 MAKA ICON, WIDTH > 800 MAKA NAV TEXT */}
                     {opsiNavigasi ? (
                         // ICON MOBILE MENU
-                        <>
-                            <div onClick={() => setOpenNav(prev => !prev)} className='z-[3] cursor-pointer'>
-                                <HamburgerMenu size={'6'} />
-                            </div>
-                        </>
+                        <div onClick={() => setOpenNav(prev => !prev)} className='cursor-pointer'>
+                            <HamburgerMenu size={'6'} />
+                        </div>
                     ) : (
-                        <ul className='navigasi flex flex-row items-center gap-[36px] text-sm sm:text-base font-medium shrink-0'>
+                        <ul className='navigasi flex flex-row items-center gap-[36px] text-sm sm:text-sm font-medium shrink-0'>
                             <li onClick={() => navigateTo('/')}>Beranda</li>
                             <li>Tentang</li>
                             <li>Kontak</li>

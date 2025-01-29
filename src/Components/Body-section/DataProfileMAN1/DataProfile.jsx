@@ -14,23 +14,24 @@ const DataProfile = () => {
                 `}
             </style>
 
+            {/* PROFILE SEKOLAH */}
             <div>
                 {/* JUDUL */}
                 <div className='w-full h-[65px] flex items-center'>
-                    <h1 className='text-[18px] sm:text-2xl font-bold'>Profile Sekolah</h1>
+                    <h1 className='text-[18px] sm:text-xl font-bold'>Profile Sekolah</h1>
                 </div>
 
                 {/* MOTTO / DESKRIPSI PROFILE SEKOLAH */}
                 <span >
-                    <p className='max-w-[65%] w-full'>MAN 1 Kota Tangerang merupakan madrasah yang visi dalam rangka memiliki generasi yang berkarakter serta unggul dalam IPTEK dan IMTAQ.</p>
+                    <p className='max-w-[65%] w-full text-sm sm:text-base'>MAN 1 Kota Tangerang merupakan madrasah yang visi dalam rangka memiliki generasi yang berkarakter serta unggul dalam IPTEK dan IMTAQ.</p>
                 </span>
 
 
                 <div className='w-full h-full flex flex-row items-center gap-[16px] mt-[32px] ' >
 
                     {/* AKAN MENGGUNAKAN ITERASI MAPPING! */}
-                    <div className='w-full h-full pt-[16px]' style={{borderTop: '1px solid var(--border)'}}>
-                        <ul className='data-sekolah w-full h-full flex flex-col gap-[12px] text-sm sm:text-base text-[var(--text-secondary)] font-regular'>
+                    <div className='w-full h-full pt-[16px]' style={{ borderTop: '1px solid var(--border)' }}>
+                        <ul className='data-sekolah w-full h-full flex flex-col gap-[12px] text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>
                             <li>
                                 <span className='w-full flex flex-row items-center justify-between'>
                                     <p>NSM (Nomor Statistik Madrasah)</p>
@@ -70,6 +71,15 @@ const DataProfile = () => {
                         </ul>
                     </div>
                 </div>
+            </div>
+
+            {/* DATA SEKOLAH */}
+            <div className='mt-[24px]'>
+                {/* JUDUL */}
+                <div className='w-full h-[60px] flex items-center'>
+                    <h1 className='text-[18px] sm:text-xl font-bold'>Data Sekolah</h1>
+                </div>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Distinctio vel ab in, delectus ipsum voluptatibus. Id mollitia sequi sapiente aliquid velit accusamus reprehenderit beatae aspernatur, aut blanditiis et tempore asperiores?</p>
             </div>
         </>
     )
