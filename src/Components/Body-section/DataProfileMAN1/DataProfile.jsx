@@ -17,18 +17,18 @@ const DataProfile = () => {
                         height: 37px;
                     }
                     
-                    .fasilitas-sekolah li {
-                        display: flex;
-                        align-items: center;
-                        width: 220px;
-                        height: 110px;
-                        background-color: var(--card);
-                        padding: 24px;
-                        border-radius: 12px;
-                        font-weight: 600;
-                        border: 1px solid var(--bg-primary);
-                        font-size: ${isMobile ? '14px' : isDesktop && '16px'}
-                    }
+                    // .fasilitas-sekolah li {
+                    //     display: flex;
+                    //     align-items: center;
+                    //     width: 220px;
+                    //     height: 110px;
+                    //     background-color: var(--card);
+                    //     padding: 24px;
+                    //     border-radius: 12px;
+                    //     font-weight: 600;
+                    //     border: 1px solid var(--bg-primary);
+                    //     font-size: ${isMobile ? '14px' : isDesktop && '16px'}
+                    // }
                 `}
             </style>
 
@@ -41,7 +41,8 @@ const DataProfile = () => {
 
                 {/* MOTTO / DESKRIPSI PROFILE SEKOLAH */}
                 <span >
-                    <p className='max-w-[65%] w-full text-sm sm:text-sm'>MAN 1 Kota Tangerang merupakan madrasah yang visi dalam rangka memiliki generasi yang berkarakter serta unggul dalam IPTEK dan IMTAQ.</p>
+                    <p className=' w-full text-sm sm:text-sm text-[var(--text-secondary)]'>MAN 1 Kota Tangerang
+                        Madrasah Aliyah Negeri (MAN) 1 Kota Tangerang adalah lembaga pendidikan Islam formal di bawah naungan Kementerian Agama Republik Indonesia yang berkomitmen untuk berkontribusi secara signifikan bagi masyarakat sebagai penerus perjuangan dalam menyebarkan syiar Islam. Dengan memahami kebutuhan tersebut, kami berupaya memberikan pelayanan terbaik bagi siswa-siswi yang pendidikannya telah dipercayakan kepada MAN 1 Kota Tangerang.</p>
                 </span>
 
 
@@ -83,21 +84,50 @@ const DataProfile = () => {
             <div className='my-[24px]'>
                 {/* JUDUL */}
                 <div className='w-full h-[60px] flex items-center'>
-                    <h1 className='text-[18px] sm:text-xl font-bold'>Fasilitas Madrasah</h1>
+                    <h1 className='text-[18px] sm:text-xl font-bold'>Sarana dan Prasarana</h1>
                 </div>
 
-                <div>
-                    <ul className='fasilitas-sekolah w-full h-full flex flex-row gap-[16px] text-sm sm:text-base text-[var(--text-primary)]'>
-                        <li>
-                            <span>
-                                <p>Perpustakaan</p>
-                                <p className='text-[var(--text-secondary)] font-[400] text-xs sm:text-sm'>Adzikra Library</p>
-                            </span>
-                        </li>
-                        <li>Lab Komputer</li>
-                        <li>Lab IPA</li>
-                        <li>UKS</li>
-                    </ul>
+                <div className='fasilitas-sekolah w-full h-full flex flex-row gap-[16px] text-sm sm:text-base text-[var(--text-primary)] overflow-x-auto pb-[16px]'>
+                    {/* PERPUSTAKAAN */}
+                    <div className='w-fit h-fit flex flex-col gap-[12px] shrink-0'>
+                        <div class="flex items-center w-[220px] h-[110px] bg-card rounded-[12px] font-semibold border border-bg-primary text-[14px] sm:text-[16px] relative">
+                            <img src="https://res.cloudinary.com/dwf753l9w/image/upload/v1738244880/Perpus_byxisp.jpg" alt="Lab IPA" className='w-full h-full object-cover rounded-lg' />
+                        </div>
+                        <span className='flex flex-col w-full h-full font-regular text-[var(--text-primary)]'>
+                            <p className='text-sm sm:text-base'>Perpustakaan</p>
+                            <p className='text-[var(--text-secondary)] font-[400] text-xs sm:text-sm'>Adzikra Library</p>
+                        </span>
+                    </div>
+
+                    {/* LAB KOMPUTER */}
+                    <div className='w-fit h-fit flex flex-col gap-[12px] shrink-0'>
+                        <div class="flex items-center w-[220px] h-[110px] bg-card rounded-[12px] font-semibold border border-bg-primary text-[14px] sm:text-[16px] relative">
+                            <img src="https://res.cloudinary.com/dwf753l9w/image/upload/v1738246127/LabKomputer_tadflw.jpg" alt="Lab IPA" className='w-full h-full object-cover rounded-xl' />
+                        </div>
+                        <span className='flex w-full h-full font-regular text-[var(--text-primary)]'>
+                            <p className='text-sm sm:text-base'>Lab Komputer</p>
+                        </span>
+                    </div>
+
+                    {/* LAB IPA */}
+                    <div className='w-fit h-fit flex flex-col gap-[12px] shrink-0'>
+                        <div class="flex items-center w-[220px] h-[110px] bg-card rounded-[12px] font-semibold border border-bg-primary text-[14px] sm:text-[16px] relative">
+                            <img src="https://res.cloudinary.com/dwf753l9w/image/upload/v1738244881/LabIPA_k0mzbd.jpg" alt="Lab IPA" className='w-full h-full object-cover rounded-xl' />
+                        </div>
+                        <span className='flex w-full h-full font-regular text-[var(--text-primary)]'>
+                            <p className='text-sm sm:text-base'>Lab IPA</p>
+                        </span>
+                    </div>
+
+                    
+
+                    {/* UKS */}
+                    <div class="flex items-center justify-center w-[220px] h-[110px] bg-[var(--card)] rounded-[12px] font-semibold border border-bg-primary text-[14px] sm:text-[16px] shrink-0">
+                        <span className='w-full h-full flex items-center justify-center'>
+                            <p className='font-regular text-[var(--text-primary)]'>UKS</p>
+                        </span>
+                    </div>
+
                 </div>
 
             </div>

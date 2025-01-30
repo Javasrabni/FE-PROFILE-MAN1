@@ -36,3 +36,21 @@
   /* Gray-300 */
 
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--text-secondary);  /* Warna bagian yang bisa digeser */
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--card);  /* Warna track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--warna-aksen); /* Warna thumb saat hover */
+}
+

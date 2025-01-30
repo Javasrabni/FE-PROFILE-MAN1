@@ -30,7 +30,7 @@ const NewsPart = () => {
                             <div className='flex flex-col gap-[16px]'>
                                 <span className='flex flex-col gap-[4px]'>
                                     <h1 className='text-base sm:text-lg font-bold line-clamp-2'>Peserta didik tahun ajaran 2025</h1>
-                                    <p className="text-sm sm:text-base text-[var(--text-secondary)] font-regular line-clamp-4">
+                                    <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
                                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex fugit quod nulla accusamus eaque, odit obcaecati illo hic omnis vero id magni blanditiis dolorum. Quaerat esse expedita facilis quam mollitia!
                                     </p>
 
@@ -144,7 +144,7 @@ const NewsPart = () => {
 
             {/* SEE ALL NEWS */}
             <div className='w-full h-full flex items-center justify-center mt-[32px]'>
-                <button className='rounded-lg text-[var(--text-primary)] font-medium text-sm bg-transparent underline px-[16px] py-[6px]'>Lihat semua Berita</button>
+                <button className='rounded-lg text-[green] font-medium text-sm bg-transparent underline px-[16px] py-[6px]'>Lihat semua Berita</button>
 
             </div>
 
