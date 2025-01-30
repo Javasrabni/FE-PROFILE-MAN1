@@ -9,8 +9,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index path='/' element={<Home />} />
-        <Route index path='/userLogin' element={<AddPeserta />} />
-        <Route index path='/userRegister' element={<AuthForm />} />
+        <Route index path='/userLogin' element={<AuthForm />} />
+        <Route index path='/userRegister' element={<AddPeserta />} />
       </Routes>
     </BrowserRouter>
   );

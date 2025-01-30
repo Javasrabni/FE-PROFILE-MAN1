@@ -32,17 +32,17 @@ const LandingPage = () => {
 
                 {/* IMAGE / VIDEO LANDING PAGE */}
                 <div className='w-full h-[480px] flex items-center relative'>
-                    <div className='flex flex-col items-start justify-end absolute bottom-[0px] left-[50%] translate-x-[-50%] z-[3] w-full h-full gap-[32px] p-[40px]'>
-                        <span className='w-full h-fit flex items-start flex-col  gap-[8px]'>
+                    <div className='flex flex-col items-center justify-center absolute bottom-[0px] left-[50%] translate-x-[-50%] z-[3] w-full h-full gap-[32px] p-[40px]'>
+                        <span className='w-full h-fit flex items-center text-center flex-col  gap-[8px]'>
                             <h1 className='font-black text-[var(--bg-primary)] font-2xl sm:text-4xl tracking-[-1.5px]'>Madrasah hebat, Madrasah lebih baik</h1>
                             <p className='text-[var(--bg-primary)] opacity-[80%] text-sm sm:text-base max-w-[60%] font-regular'>Halaman Madrasah Aliyah Negri 1 Kota Tangerang, Informasi tentang madrasah dan penerimaan peserta didik baru.</p>
                         </span>
                         <span className=''>
-                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={()=> navigateTo('/userRegister')}>Pendaftaran SNPDB</button>
+                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={() => navigateTo('/userRegister')}>Portal SNPDB</button>
                         </span>
 
                     </div>
-                    <div className='w-full h-[480px] max-w-[67.5rem]  absolute left-[50%] translate-x-[-50%]  z-[2] bg-[#00000050] rounded-xl' style={{backdropFilter: 'blur(1px)'}}/>
+                    <div className='w-full h-[480px] max-w-[67.5rem]  absolute left-[50%] translate-x-[-50%]  z-[2] bg-[#00000050] rounded-xl' style={{ backdropFilter: 'blur(0px)' }} />
                     <img src="https://res.cloudinary.com/dwf753l9w/image/upload/v1737952463/header-image_sephfa.webp" alt="Landing Page Man 1 Kota Tangerang" className='w-full h-full object-cover rounded-xl' draggable='false' onContextMenu={(e) => e.preventDefault()} />
                 </div>
 
@@ -52,7 +52,8 @@ const LandingPage = () => {
                         <ul className='Sec-nav flex flex-row gap-[16px] sm:gap-[32px] text-sm sm:text-sm font-bold items-center shrink-0 text-[var(--text-secondary)]'>
                             <li>Overview</li>
                             <li>Berita</li>
-                            <li>Data Sekolah</li>
+                            <li>Data MAN 1</li>
+                            <li>Fasilitas/Sarana dan Prasana </li>
                         </ul>
                     </div>
 

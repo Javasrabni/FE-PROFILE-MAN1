@@ -3,6 +3,7 @@ import Header from '../Components/Navbar/Header'
 import LandingPage from '../Components/Body-section/Landing/LandingPage'
 import NewsPart from '../Components/Body-section/News/NewsPart'
 import DataProfile from '../Components/Body-section/DataProfileMAN1/DataProfile'
+import { PrestasiMadrasah } from '../Components/Body-section/Prestasi/PrestasiMadrasah'
 
 const Home = () => {
 
@@ -18,6 +19,9 @@ const Home = () => {
                 </div>
                 <div>
                     <DataProfile />
+                </div>
+                <div>
+                    <PrestasiMadrasah />
                 </div>
             </main>
         </div>
