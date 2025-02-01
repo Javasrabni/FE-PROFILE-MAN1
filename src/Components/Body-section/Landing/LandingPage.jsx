@@ -47,13 +47,13 @@ const LandingPage = () => {
                 </div>
 
                 {/* SECONDARY NAV */}
-                <div className='w-full h-[60px] mt-[8px]' style={{ borderBottom: '1px solid var(--border)' }}>
+                <div className='w-full h-[60px] mt-[8px] overflow-x-auto' style={{ borderBottom: '1px solid var(--border)' }}>
                     <div className='flex flex-row h-full w-full'>
                         <ul className='Sec-nav flex flex-row gap-[16px] sm:gap-[32px] text-sm sm:text-sm font-bold items-center shrink-0 text-[var(--text-secondary)]'>
                             <li>Overview</li>
                             <li>Berita</li>
                             <li>Data MAN 1</li>
-                            <li>Fasilitas/Sarana dan Prasana </li>
+                            <li>Fasilitas</li>
                         </ul>
                     </div>
 

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { useEffect, useState } from 'react'
 
-export const PrestasiMadrasah = () => {
+const PrestasiSiswa = () => {
     // GET OUTPUT PRESTASI FROM ADMIN
     const [outputPrestasi, setOutputPrestasi] = useState([])
     useEffect(() => {
@@ -35,13 +36,12 @@ export const PrestasiMadrasah = () => {
             console.error(error)
         }
     }
-
     return (
-        <div>
+        <div className='mt-[24px]'>
             {/* JUDUL */}
             <div className='w-full h-[60px] flex flex-col gap-[2px] mb-[16px]'>
-                <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Madrasah</h1>
-                <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh MAN 1 Kota Tangerang</p>
+                <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Siswa</h1>
+                <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh siswa MAN 1 Kota Tangerang</p>
             </div>
 
             <div className='overflow-x-auto pb-[16px]'>
@@ -50,6 +50,7 @@ export const PrestasiMadrasah = () => {
                         <tr className="bg-gray-100">
                             <th className="border border-gray-300 px-4 py-2 text-left">Prestasi</th>
                             <th className="border border-gray-300 px-4 py-2 text-left">Tingkat</th>
+                            <th className="border border-gray-300 px-4 py-2 text-left">Tahun</th>
                             <th className="border border-gray-300 px-4 py-2 text-left">Deskripsi</th>
                             {/* <th className="border border-gray-300 px-4 py-2 text-left">File Pendukung</th> */}
                         </tr>
@@ -59,13 +60,14 @@ export const PrestasiMadrasah = () => {
                             <tr key={index} className="odd:bg-white even:bg-[var(--card)] text-sm sm:text-sm" onClick={() => console.log(item.id)}>
                                 <td className="border border-gray-300 px-4 py-2">{item.prestasi === '' || null ? '-' : item.prestasi}</td>
                                 <td className="border border-gray-300 px-4 py-2">{item.tingkat === '' || null ? '-' : item.tingkat}</td>
+                                <td className="border border-gray-300 px-4 py-2">{item.tahun === '' || null ? '-' : item.tahun}</td>
                                 <td className="border border-gray-300 px-4 py-2">{item.deskripsi === '' || null ? '-' : item.deskripsi}</td>
                                 {/* <td className="border border-gray-300 px-4 py-2">
-                                <div className='flex flex-row items-center'>
-                                    <button className='bg-[green] w-full h-full text-white p-[4px]'>Edit</button>
-                                    <button className='bg-[tomato] w-full h-full text-white p-[4px]' onClick={() => HandleDeletePrestasi(item.id)}>Delete</button>
-                                </div>
-                            </td> */}
+                        <div className='flex flex-row items-center'>
+                            <button className='bg-[green] w-full h-full text-white p-[4px]'>Edit</button>
+                            <button className='bg-[tomato] w-full h-full text-white p-[4px]' onClick={() => HandleDeletePrestasi(item.id)}>Delete</button>
+                        </div>
+                    </td> */}
 
                             </tr>
                         )}
@@ -77,3 +79,5 @@ export const PrestasiMadrasah = () => {
         </div>
     )
 }
+
+export default PrestasiSiswa
