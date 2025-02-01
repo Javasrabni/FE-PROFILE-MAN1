@@ -53,16 +53,16 @@ export const PrestasiMadrasah = () => {
                 </thead>
                 <tbody>
                     {outputPrestasi.map((item, index) =>
-                        <tr key={item.id} className="odd:bg-white even:bg-gray-50" onClick={() => console.log(item.id)}>
-                            <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
-                            <td className="border border-gray-300 px-4 py-2">{item.name}</td>
-                            <td className="border border-gray-300 px-4 py-2">{item.email}</td>
-                            <td className="border border-gray-300 px-4 py-2">
+                        <tr key={index} className="odd:bg-white even:bg-[var(--card)] text-sm sm:text-sm" onClick={() => console.log(item.id)}>
+                            <td className="border border-gray-300 px-4 py-2">{item.prestasi}</td>
+                            <td className="border border-gray-300 px-4 py-2">{item.tingkat}</td>
+                            <td className="border border-gray-300 px-4 py-2">{item.deskripsi}</td>
+                            {/* <td className="border border-gray-300 px-4 py-2">
                                 <div className='flex flex-row items-center'>
                                     <button className='bg-[green] w-full h-full text-white p-[4px]'>Edit</button>
                                     <button className='bg-[tomato] w-full h-full text-white p-[4px]' onClick={() => HandleDeletePrestasi(item.id)}>Delete</button>
                                 </div>
-                            </td>
+                            </td> */}
 
                         </tr>
                     )}
