@@ -47,7 +47,8 @@ export const PrestasiMadrasah = () => {
             <div className='overflow-x-auto pb-[16px]'>
                 <table className="min-w-full border-collapse border border-gray-300">
                     <thead>
-                        <tr className="bg-gray-100">
+                        {/* BG-GRAY-100 */}
+                        <tr className="bg-[var(--warna-aksen)]">
                             <th className="border border-gray-300 px-4 py-2 text-left">Prestasi</th>
                             <th className="border border-gray-300 px-4 py-2 text-left">Tingkat</th>
                             <th className="border border-gray-300 px-4 py-2 text-left">Deskripsi</th>
@@ -56,7 +57,7 @@ export const PrestasiMadrasah = () => {
                     </thead>
                     <tbody>
                         {outputPrestasi.map((item, index) =>
-                            <tr key={index} className="odd:bg-white even:bg-[var(--card)] text-sm sm:text-sm" onClick={() => console.log(item.id)}>
+                            <tr key={index} className="odd:bg-white even:bg-gray-100 text-sm sm:text-sm" onClick={() => console.log(item.id)}>
                                 <td className="border border-gray-300 px-4 py-2">{item.prestasi === '' || null ? '-' : item.prestasi}</td>
                                 <td className="border border-gray-300 px-4 py-2">{item.tingkat === '' || null ? '-' : item.tingkat}</td>
                                 <td className="border border-gray-300 px-4 py-2">{item.deskripsi === '' || null ? '-' : item.deskripsi}</td>
