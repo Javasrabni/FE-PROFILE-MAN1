@@ -1,7 +1,39 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../Navbar/Header'
+import { GetTokenContext } from './GetTokenContext'
+import NavigatePage from '../Navigate/useNavigate'
 
 export const AuthForm = () => {
+    const navigateTo = NavigatePage()
+
+    const { token, setToken } = useContext(GetTokenContext) // CONTEXT TO SAVE / GET TOKEN
+    console.log(token)
+    const [username, setUsername] = useState()
+    const [password, setPassword] = useState()
+
+    // POST LOGIN
+    async function HandleLoginAdmin() {
+        try {
+            const response = await fetch(`http://localhost:8000/AdminAuth`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }, body: JSON.stringify({ username: username, password: password })
+            })
+            if (response.ok) {
+                const { msg, token } = await response.json()
+                setToken(token)
+                alert(msg)
+                navigateTo('/')
+            } else {
+                console.log('Password sala')
+            }
+        } catch (err) {
+            console.error("Error pada sisi Server", err)
+        }
+    }
+
+
     return (
         <>
             <style>
@@ -20,7 +52,7 @@ export const AuthForm = () => {
                 <div className='w-full h-[80svh] bg-[var(--bg-primary)] relative flex-row justify-between gap-[32px] flex items-center rounded-xl'>
                     <div className='w-full h-full flex flex-col items-center justify-center gap-[32px] p-[16px]'>
                         <span>
-                            <h1 className='text-sm sm:text-xl font-bold'>LogIn SNPDB</h1>
+                            <h1 className='text-sm sm:text-xl font-bold'>LogIn Admin</h1>
                         </span>
                         {/* <div className='flex w-full flex-row justify-between items-center'>
                             <span className='w-full flex items-center justify-center'>
@@ -33,11 +65,14 @@ export const AuthForm = () => {
                         <div className='input-class flex flex-col w-full h-fit gap-[16px]'>
                             <span className='flex flex-col gap-[4px] text-sm sm:text-base'>
                                 <label id='username'>Username</label>
-                                <input type="text" />
+                                <input type="text" onChange={(e) => setUsername(e.target.value)} />
                             </span>
                             <span className='flex flex-col gap-[4px] text-sm sm:text-base'>
-                                <label id='password'>Password</label>
-                                <input type="password" />
+                                <label id='password' >Password</label>
+                                <input type="password" onChange={(e) => setPassword(e.target.value)} />
+                            </span>
+                            <span>
+                                <button onClick={HandleLoginAdmin}>Masuk</button>
                             </span>
                         </div>
                     </div>
