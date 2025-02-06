@@ -6,16 +6,19 @@ import { AuthForm } from './Components/Auth/AuthForm';
 
 // CONTEXT
 import { GetTokenContextProvider } from './Components/Auth/GetTokenContext';
+import { PanelAdminProvider } from './Context/ControlPanelAdmin/PanelAdminCtx';
 
 function App() {
   return (
     <BrowserRouter>
       <GetTokenContextProvider>
-        <Routes>
-          <Route index path='/' element={<Home />} />
-          <Route index path='/AdminAuth' element={<AuthForm />} />
-          <Route index path='/userRegister' element={<AddPeserta />} />
-        </Routes>
+        <PanelAdminProvider>
+          <Routes>
+            <Route index path='/' element={<Home />} />
+            <Route index path='/AdminAuth' element={<AuthForm />} />
+            <Route index path='/userRegister' element={<AddPeserta />} />
+          </Routes>
+        </PanelAdminProvider>
       </GetTokenContextProvider>
     </BrowserRouter>
   );

@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useRef } from 'react'
 import { HamburgerMenu } from '../Icon/ListIcon'
 import NavigatePage from '../Navigate/useNavigate'
+import { GetTokenContext } from '../Auth/GetTokenContext'
 
 const Header = () => {
     const navigateTo = NavigatePage()
+
+    // CONTEXT TO SAVE / GET TOKEN
+    const { token, setToken } = useContext(GetTokenContext)
 
     // RESPONSIVE HEADER & HEADER FUNC
     const HeaderRef = useRef(null)
@@ -33,6 +37,20 @@ const Header = () => {
         }
     }, [HeaderWidth])
     const [openNav, setOpenNav] = useState(false)
+
+    // HANDLE LOGOUT ADMIN
+    function HandleLogOutAdmin() {
+        const confirm = window.confirm("Yakin Logout Admin?")
+        if (!confirm) {
+            return
+        } else {
+            localStorage.removeItem('saveToken')
+            const delay = setTimeout(() => {
+                window.location.reload()
+            }, 1000)
+            return () => clearTimeout(delay)
+        }
+    }
 
     return (
         <>
@@ -87,9 +105,11 @@ const Header = () => {
                             <li>Tentang</li>
                             <li>Kontak</li>
                             <li>Lokasi</li>
-                            <li onClick={() => navigateTo('/AdminAuth')}><span className='bg-[var(--card)] px-[16px] py-[12px] rounded-xl text-[var(--text-primary)] hover:bg-[var(--second-aksen)] font-bold'>Log In</span></li>
+                            <li onClick={token ? HandleLogOutAdmin : () => navigateTo('/AdminAuth')}>
+                                <span className={`bg-[var(--card)] px-[16px] py-[12px] rounded-xl  ${token ? 'text-[tomato] hover:text-[var(--text-primary)]' : 'text-[var(--text-primary)]'} hover:bg-[var(--second-aksen)] font-bold`}>{token ? <span>LogOut</span> : <span>Log In</span>}</span>
+                            </li>
                         </ul>
-                    )}
+                    )} 
                 </div>
             </div>
 

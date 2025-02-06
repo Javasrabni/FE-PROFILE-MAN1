@@ -13,9 +13,9 @@
   --second-aksen: #7CE87C;
 
   /* Accent/Interactive Colors */
-  --accent: #3b82f6;
+  --aksen-biru: #1D4ED8;
   /* Blue-500 */
-  --accent-hover: #2563eb;
+  --biru-aksen-hover: #2563eb;
   /* Blue-600 */
 
   /* Background Colors */
@@ -43,14 +43,16 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--text-secondary);  /* Warna bagian yang bisa digeser */
+  background-color: var(--text-secondary);
+  /* Warna bagian yang bisa digeser */
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--card);  /* Warna track */
+  background-color: var(--card);
+  /* Warna track */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--warna-aksen); /* Warna thumb saat hover */
+  background-color: var(--warna-aksen);
+  /* Warna thumb saat hover */
 }
-
