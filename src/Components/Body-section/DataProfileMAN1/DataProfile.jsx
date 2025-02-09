@@ -94,8 +94,8 @@ const DataProfile = () => {
                             <img src="https://res.cloudinary.com/dwf753l9w/image/upload/v1738244880/Perpus_byxisp.jpg" alt="Lab IPA" className='w-full h-full object-cover rounded-lg' />
                         </div>
                         <span className='flex flex-col w-full h-full font-regular text-[var(--text-primary)]'>
-                            <p className='text-sm sm:text-base'>Perpustakaan</p>
-                            <p className='text-[var(--text-secondary)] font-[400] text-xs sm:text-sm'>Adzikra Library</p>
+                            <p className='text-sm sm:text-sm font-semibold'>Perpustakaan</p>
+                            {/* <p className='text-[var(--text-secondary)] font-[400] text-xs sm:text-sm'>Adzikra Library</p> */}
                         </span>
                     </div>
 
@@ -105,7 +105,7 @@ const DataProfile = () => {
                             <img src="https://res.cloudinary.com/dwf753l9w/image/upload/v1738246127/LabKomputer_tadflw.jpg" alt="Lab IPA" className='w-full h-full object-cover rounded-xl' />
                         </div>
                         <span className='flex w-full h-full font-regular text-[var(--text-primary)]'>
-                            <p className='text-sm sm:text-base'>Lab Komputer</p>
+                            <p className='text-sm sm:text-sm font-semibold'>Lab Komputer</p>
                         </span>
                     </div>
 
@@ -115,7 +115,7 @@ const DataProfile = () => {
                             <img src="https://res.cloudinary.com/dwf753l9w/image/upload/v1738244881/LabIPA_k0mzbd.jpg" alt="Lab IPA" className='w-full h-full object-cover rounded-xl' />
                         </div>
                         <span className='flex w-full h-full font-regular text-[var(--text-primary)]'>
-                            <p className='text-sm sm:text-base'>Lab IPA</p>
+                            <p className='text-sm sm:text-sm font-semibold'>Lab IPA</p>
                         </span>
                     </div>
 
@@ -124,7 +124,7 @@ const DataProfile = () => {
                     {/* UKS */}
                     <div class="flex items-center justify-center w-[220px] h-[110px] bg-[var(--card)] rounded-[12px] font-semibold border border-bg-primary text-[14px] sm:text-[16px] shrink-0">
                         <span className='w-full h-full flex items-center justify-center'>
-                            <p className='font-regular text-[var(--text-primary)]'>UKS</p>
+                            <p className='font-semibold text-[var(--text-primary)] text-sm'>UKS</p>
                         </span>
                     </div>
 

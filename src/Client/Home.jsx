@@ -28,6 +28,11 @@ const Home = () => {
     })
     useEffect(() => {
         localStorage.setItem('saveModeAdminStatus', JSON.stringify(onLogged))
+        if (onLogged) {
+            document.body.style.overflow = "hidden"
+        } else {
+            document.body.style.overflow = "auto"
+        }
     }, [onLogged])
 
     const { PanelEditPage, setPanelEditPage } = useContext(PanelAdminContext)
@@ -36,23 +41,59 @@ const Home = () => {
 
     return (
         <>
-            {/* INFO ADMIN VIEW / ADMIN MODE */}
+            {/* INFO ADMIN VIEW / ADMIN MODE / MODAL */}
             {token && onLogged && (
-                <StatusAdminLogged
-                    button={
-                        <span className='flex flex-row items-center gap-[16px] h-full mt-[8px]'>
-                            <button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setOnLogged(false)}>Tutup</button>
-                            <p className='text-xs sm:text-sm text-[var(--text-secondary)] cursor-pointer' onClick={() => navigate('/')}>Pergi ke Dashboard</p>
-                        </span>
-
-                    }
-                />
+                <div className='w-full h-full flex items-center justify-center left-0 top-0 fixed z-50'>
+                    <div class="w-full p-4 h-fit flex items-center justify-center z-[10]">
+                        <div class="relative w-full max-w-md max-h-full">
+                            {/* <!-- Modal content --> */}
+                            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 w-full">
+                                {/* <!-- Modal header --> */}
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                    <h3 class="text-base font-medium text-gray-900 dark:text-white">
+                                        Mode Admin
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="small-modal" onClick={() => setOnLogged(false)}>
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                {/* <!-- Modal body --> */}
+                                <div class="p-4 md:p-5 space-y-4 overflow-y-scroll h-full max-h-[340px]">
+                                    <p className="text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                                        Dalam mode Admin, Admin dapat melakukan dan mengatur beberapa hal, diantaranya:
+                                    </p>
+                                    <ul className="text-sm leading-relaxed text-gray-500 dark:text-gray-400" style={{ listStyleType: 'decimal', paddingLeft: "16px" }}>
+                                        <li>Dapat melakukan perubahan atau update pada tampilan halaman (Text, Tabel, Gambar, dll)</li>
+                                        <li>Pemantauan data terkait peserta SNPDB, serta mendownload semua data peserta (Terkolektif dalam bentuk 1 file Excel / .xlsx)</li>
+                                        <li>Membuka maupun menutup pendaftaran SNPDB, Serta dapat menetapkan kuota peserta (Jika kuota sudah terpenuhi, maka secara otomatis sistem akan menutup pendaftaran)</li>
+                                        <li>Menetapkan <b>Diterima</b> dan <b>Tidak Diterimanya</b> Peserta (Akan ada halaman Dashboard, Tombol untuk menetapkannya)</li>
+                                        <li>Dan Fitur lainnya</li>
+                                    </ul>
+                                    <p className="text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                                        Setiap perubahan atau update diperbarui secara realtime di Database, koneksi internet yang stabil sangat dibutuhkan.<br /> <br />
+                                        Jika ada kendala atau masalah teknis, hubungi ke no 0878-8852-3299 atau 0851-3541-8852 (Javas Anggaraksa Rabbani)
+                                    </p>
+                                </div>
+                                {/* <!-- Modal footer --> */}
+                                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                    <button data-modal-hide="small-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={() => setOnLogged(false)}>Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='w-full h-full bg-[#00000080] absolute' />
+                </div >
             )}
 
             {/* CONTROL PANEL ADMIN */}
-            {token && (
-                <ControlPanelAdmin />
-            )}
+            {
+                token && (
+                    <ControlPanelAdmin />
+                )
+            }
 
             {/* SAVE BUTTON JIKA EDIT PAGE DI ADMIN PANEL AKTIF (TRUE) */}
             {/* {token && PanelEditPage && (
@@ -87,7 +128,7 @@ const Home = () => {
 
                 <footer className='w-full h-full py-[32px] px-[65px] flex flex-col gap-[12px] bg-[var(--card)] gap-[32px]'>
                     <div className='flex flex-row items-center justify-around gap-[32px]'>
-                        
+
                         {/* LOGO MAN */}
                         {/* <div className="w-[30px] h-[30px] sm:w-[150px] sm:h-[150px]">
                             <img

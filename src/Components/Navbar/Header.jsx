@@ -45,6 +45,7 @@ const Header = () => {
             return
         } else {
             localStorage.removeItem('saveToken')
+            localStorage.clear()
             const delay = setTimeout(() => {
                 window.location.reload()
             }, 1000)

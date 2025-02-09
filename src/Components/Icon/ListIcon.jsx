@@ -55,3 +55,10 @@ export const LoadingEffect = ({ text }) => {
         </div>
     )
 }
+
+export const TambahIcon = ({ sizeOnPx, color }) => {
+    return (
+        <i class="fa-solid fa-plus" style={{ fontSize: `${sizeOnPx}px`, color: `${color}` }}></i>
+
+    )
+}
