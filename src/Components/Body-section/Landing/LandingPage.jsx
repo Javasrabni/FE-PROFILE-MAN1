@@ -3,8 +3,9 @@ import NavigatePage from '../../Navigate/useNavigate'
 import { useContext } from 'react'
 import { GetTokenContext } from '../../Auth/GetTokenContext'
 import { PanelAdminContext } from '../../../Context/ControlPanelAdmin/PanelAdminCtx'
-import { CheckIcon, PencilIcon } from '../../Icon/ListIcon'
+import { CheckIcon, PencilIcon, LoadingEffect } from '../../Icon/ListIcon'
 import { motion } from 'framer-motion'
+
 
 const LandingPage = () => {
     const navigateTo = NavigatePage()
@@ -26,22 +27,32 @@ const LandingPage = () => {
                 const data = await response.json()
                 setSloganHeadingLanding(data[0].headline)
                 setSubHeadlineLanding(data[0].subHeadline)
+                setButtonLanding(data[0].buttonLanding)
             }
         }
         GetLandingPageTXT()
     }, [])
-    const [onEdit, setOnEdit] = useState(false)
 
     // API CRUD
-
     const [onSuccesEdit, setOnSuccesEdit] = useState(null)
     const [onSuccesEditState, setOnSuccesEditState] = useState(false)
+    useEffect(() => {
+        if (onSuccesEditState) {
+            const delay = setTimeout(() => {
+                setOnSuccesEditState(false)
+            }, 6000)
+            return () => clearTimeout(delay)
+        }
+    }, [onSuccesEditState]) // AUTO CLOSE POPUP SUKSES UPDATE IN 6s
+    const [onLoading, setOnLoading] = useState(false) // LOADING STATE
 
     // HEADLINE LANDING
+    const [onEditHeadline, setOnEditHeadline] = useState(false)
     const [sloganHeadingLanding, setSloganHeadingLanding] = useState([])
     async function HandleSaveHeadline() {
-        setOnEdit(prev => !prev)
+        setOnEditHeadline(prev => !prev)
         try {
+            setOnLoading(true)
             const response = await fetch(`${process.env.REACT_APP_BE_URL}/Lptxt`, {
                 method: "PATCH",
                 headers: {
@@ -56,14 +67,18 @@ const LandingPage = () => {
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOnLoading(false)
         }
     }
 
     // SUBHEADLINE LANDING
+    const [onEditSubHeadline, setOnEditSubHeadline] = useState(false)
     const [subheadlineLanding, setSubHeadlineLanding] = useState([])
     async function HandleSaveSubheadline() {
-        setOnEdit(prev => !prev)
+        setOnEditSubHeadline(prev => !prev)
         try {
+            setOnLoading(true)
             const response = await fetch(`${process.env.REACT_APP_BE_URL}/Lptxt`, {
                 method: "PATCH",
                 headers: {
@@ -78,12 +93,48 @@ const LandingPage = () => {
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOnLoading(false)
         }
     }
 
+    // BUTTON LANDING
+    const [onEditButtonLanding, setOnEditButtonLanding] = useState(false)
+    const [buttonLanding, setButtonLanding] = useState([])
+    async function HandleSaveButtonLanding() {
+        setOnEditButtonLanding(prev => !prev)
+        try {
+            setOnLoading(true)
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/Lptxt`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, body: JSON.stringify({ buttonLanding: buttonLanding })
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setOnSuccesEdit(data.msg)
+                setOnSuccesEditState(true)
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setOnLoading(false)
+        }
+    }
 
     return (
         <>
+            {/* POPUP LOADING */}
+            {onLoading && (
+                <SuccessPopup
+                    heading={<LoadingEffect text={'Loading..'} />}
+                    subHeading={"Data sedang dikirim ke Database. mohon tunggu, pastikan koneksi internet stabil"}
+                />
+            )}
+
+            {/* POPUP SUKSES UPDATE */}
             {onSuccesEditState && (
                 <SuccessPopup
                     heading={"Berhasil Update!"}
@@ -126,29 +177,38 @@ const LandingPage = () => {
                         {/* HEADLINE */}
                         <span className='w-full h-fit flex items-center text-center flex-col  gap-[8px]'>
                             {token && PanelEditPage ? (
-                                <span className='flex flex-row items-center gap-[16px]'>
-                                    {onEdit ? (
-                                        <>
-                                            <input className='w-full bg-transparent outline-none border-none  font-black text-[var(--bg-primary)] font-2xl sm:text-4xl tracking-[-1.5px]' type="text" value={sloganHeadingLanding} onChange={(e) => setSloganHeadingLanding(e.target.value)} />
+                                <span className='flex flex-row items-center gap-[16px] w-full'>
+                                    {onEditHeadline ? (
+                                        <div className='w-full h-full relative flex flex-row items-center justify-between'>
+                                            <input className='bg-transparent outline-none border-none  font-black text-[var(--bg-primary)] font-2xl sm:text-4xl tracking-[-1.5px]' type="text" value={sloganHeadingLanding} onChange={(e) => setSloganHeadingLanding(e.target.value)} style={{
+                                                outline: '1px solid var(--warna-aksen)', textOverflow: "ellipsis",
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                            }} />
 
-                                            <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg ' onClick={HandleSaveSubheadline}>
-                                                <CheckIcon
-                                                    sizeOnPx={20}
-                                                    color={"#005eff"} />
-                                                <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
-                                            </span>
-                                            <p className='text-xs sm:text-sm text-white cursor-pointer underline' onClick={() => setOnEdit(false)}>Cancle</p>
-                                        </>
+                                            <div className=' w-fit flex flex-row gap-[16px] items-center '>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg ' onClick={HandleSaveHeadline}>
+                                                    <CheckIcon
+                                                        sizeOnPx={20}
+                                                        color={"#005eff"} />
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
+                                                </span>
+                                                <p className='text-xs sm:text-sm text-white cursor-pointer underline' onClick={() => setOnEditHeadline(false)}>Cancle</p>
+                                            </div>
+                                        </div>
                                     ) : (
-                                        <>
-                                            <h1 className='font-black text-[var(--bg-primary)] font-2xl sm:text-4xl tracking-[-1.5px]'>{sloganHeadingLanding}</h1>
-                                            <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEdit(prev => !prev)}>
-                                                <PencilIcon
-                                                    sizeOnPx={20}
-                                                    color={"#005eff"} />
-                                                <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
-                                            </span>
-                                        </>
+                                        <div className='w-full h-full relative flex items-center justify-center'>
+                                            <h1 className='font-black text-[var(--bg-primary)] font-2xl sm:text-4xl tracking-[-1.5px]' style={{ outline: '1px solid #005eff' }}>{sloganHeadingLanding}</h1>
+
+                                            <div className='absolute right-0'>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEditHeadline(prev => !prev)}>
+                                                    <PencilIcon
+                                                        sizeOnPx={20}
+                                                        color={"#005eff"} />
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
+                                                </span>
+                                            </div>
+                                        </div>
 
                                     )}
 
@@ -163,26 +223,30 @@ const LandingPage = () => {
                             {/* SUBHEADLINE */}
                             {token && PanelEditPage ? (
                                 <span className='flex flex-row items-center gap-[16px] w-full'>
-                                    {onEdit ? (
-                                        <div className='w-full h-full relative items-center justify-center'>
-                                            <textarea className='w-full bg-transparent outline-none border-none text-[var(--bg-primary)] opacity-[80%] text-sm sm:text-base max-w-[60%] font-regular resize-none' type="text" value={subheadlineLanding} onChange={(e) => setSubHeadlineLanding(e.target.value)} />
+                                    {onEditSubHeadline ? (
+                                        <div className='w-full h-full relative flex flex-row items-center justify-between'>
+                                            <input className='w-full bg-transparent outline-none border-none text-[var(--bg-primary)] opacity-[80%] text-sm sm:text-base max-w-[60%] font-regular resize-none' type="text" value={subheadlineLanding} onChange={(e) => setSubHeadlineLanding(e.target.value)} style={{
+                                                outline: '1px solid var(--warna-aksen)', textOverflow: "ellipsis",
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                            }} />
 
-                                            <div className='absolute right-0'>
+                                            <div className=' w-fit flex flex-row gap-[16px] items-center '>
                                                 <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={HandleSaveSubheadline}>
                                                     <CheckIcon
                                                         sizeOnPx={20}
                                                         color={"#005eff"} />
                                                     <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
                                                 </span>
-                                                <p className='text-xs sm:text-sm text-white cursor-pointer underline' onClick={() => setOnEdit(false)}>Cancle</p>
+                                                <p className='text-xs sm:text-sm text-white cursor-pointer underline' onClick={() => setOnEditSubHeadline(false)}>Cancle</p>
                                             </div>
                                         </div>
                                     ) : (
                                         <div className='w-full h-full relative flex items-center justify-center'>
-                                            <p className='text-[var(--bg-primary)] opacity-[80%] text-sm sm:text-base max-w-[60%] font-regular text-center'>{subheadlineLanding}</p>
+                                            <p className='text-[var(--bg-primary)] opacity-[80%] text-sm sm:text-base max-w-[60%] font-regular text-center ' style={{ outline: '1px solid #005eff' }}>{subheadlineLanding}</p>
 
                                             <div className='absolute right-0'>
-                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEdit(prev => !prev)}>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEditSubHeadline(prev => !prev)}>
                                                     <PencilIcon
                                                         sizeOnPx={20}
                                                         color={"#005eff"} />
@@ -198,9 +262,51 @@ const LandingPage = () => {
                                 <p className='text-[var(--bg-primary)] opacity-[80%] text-sm sm:text-base max-w-[60%] font-regular'>{subheadlineLanding}</p>
                             )}
                         </span>
-                        <span className=''>
-                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={() => navigateTo('/userRegister')}>Portal SNPDB</button>
-                        </span>
+
+                        {/* BUTTON LANDING */}
+                        {token && PanelEditPage ? (
+                            <span className='flex flex-row items-center gap-[16px] w-full'>
+                                {onEditButtonLanding ? (
+                                    <div className='w-full h-full relative flex flex-row items-center justify-between'>
+                                        <span className='py-[6px] px-[16px]' style={{ outline: '1px solid var(--warna-aksen)' }}>
+                                            <input className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold outline-none border-none' autoFocus type="text" value={buttonLanding} onChange={(e) => setButtonLanding(e.target.value)} />
+                                        </span>
+
+                                        <div className=' w-fit flex flex-row gap-[16px] items-center '>
+                                            <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={HandleSaveButtonLanding}>
+                                                <CheckIcon
+                                                    sizeOnPx={20}
+                                                    color={"#005eff"} />
+                                                <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
+                                            </span>
+                                            <p className='text-xs sm:text-sm text-white cursor-pointer underline' onClick={() => setOnEditButtonLanding(false)}>Cancle</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className='w-full h-full relative flex flex-row items-center justify-center'>
+                                        <span className='px-[16px] py-[6px]' style={{ outline: '1px solid #005eff' }}>
+                                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={() => navigateTo('/userRegister')} >{buttonLanding}</button>
+
+                                        </span>
+
+
+                                        <div className='absolute right-0'>
+                                            <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEditButtonLanding(prev => !prev)}>
+                                                <PencilIcon
+                                                    sizeOnPx={20}
+                                                    color={"#005eff"} />
+                                                <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+
+
+                            </span>
+                        ) : (
+                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={() => navigateTo('/userRegister')}>{buttonLanding}</button>
+
+                        )}
 
                     </div>
                     <div className='w-full h-[480px] max-w-[67.5rem]  absolute left-[50%] translate-x-[-50%]  z-[2] bg-[#00000050] rounded-xl' style={{ backdropFilter: 'blur(0px)' }} />
@@ -219,7 +325,7 @@ const LandingPage = () => {
                     </div>
 
                 </div>
-            </div>
+            </div >
 
         </>
     )

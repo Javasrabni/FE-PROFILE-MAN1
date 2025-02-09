@@ -87,14 +87,17 @@ const Home = () => {
 
                 <footer className='w-full h-full py-[32px] px-[65px] flex flex-col gap-[12px] bg-[var(--card)] gap-[32px]'>
                     <div className='flex flex-row items-center justify-around gap-[32px]'>
-                        <div className="w-[30px] h-[30px] sm:w-[150px] sm:h-[150px]">
+                        
+                        {/* LOGO MAN */}
+                        {/* <div className="w-[30px] h-[30px] sm:w-[150px] sm:h-[150px]">
                             <img
                                 className="w-full object-cover"
                                 src="https://res.cloudinary.com/dwf753l9w/image/upload/v1737950352/logo_1_sfgywb.png"
                                 alt="Kemenag logo"
                                 loading='lazy'
                             />
-                        </div>
+                        </div> */}
+
                         {/* FIELD PERTANYAAN */}
                         <div className='max-w-[40%] w-full sm:w-full h-full'>
                             <FieldPertanyaan />

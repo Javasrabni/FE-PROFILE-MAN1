@@ -81,6 +81,7 @@ const Header = () => {
                         <p className="text-sm sm:text-sm font-bold font-[lexend] m-0 p-0 leading-[1]">
                             MAN 1 KOTA TANGERANG
                         </p>
+
                         {HeaderWidth <= 640 && (
                             <p className="text-[12px] sm:text-sm font-medium font-[lexend] text-[var(--text-secondary)] m-0 p-0 leading-[1]">
                                 Kota Tangerang
@@ -88,7 +89,16 @@ const Header = () => {
                         )}
 
                     </span>
+                    {token && (
+                        <div className='hidden sm:flex'>
+                            <p className='text-[var(--warna-aksen)] text-sm animate-pulse'>• Sedang dalam mode Admin</p>
+                        </div>
+                    )}
+
                 </div>
+
+
+
 
 
                 {/* Navigasi */}
@@ -109,7 +119,7 @@ const Header = () => {
                                 <span className={`bg-[var(--card)] px-[16px] py-[12px] rounded-xl  ${token ? 'text-[tomato] hover:text-[var(--text-primary)]' : 'text-[var(--text-primary)]'} hover:bg-[var(--second-aksen)] font-bold`}>{token ? <span>LogOut</span> : <span>Log In</span>}</span>
                             </li>
                         </ul>
-                    )} 
+                    )}
                 </div>
             </div>
 

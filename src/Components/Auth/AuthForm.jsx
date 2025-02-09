@@ -2,14 +2,24 @@ import React, { useContext, useEffect, useState } from 'react'
 import Header from '../Navbar/Header'
 import { GetTokenContext } from './GetTokenContext'
 import NavigatePage from '../Navigate/useNavigate'
+import { useLocation } from 'react-router-dom'
 
 export const AuthForm = () => {
+    const location = useLocation()
     const navigateTo = NavigatePage()
 
     const { token, setToken } = useContext(GetTokenContext) // CONTEXT TO SAVE / GET TOKEN
     console.log(token)
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
+
+    // Jika sudah login, maka hidden path
+    const hiddenPaths = ["/AdminAuth"];
+    useEffect(() => {
+        if (token && hiddenPaths.includes(location.pathname)) {
+            navigateTo('/')
+        }
+    }, [token])
 
     // POST LOGIN
     async function HandleLoginAdmin() {
