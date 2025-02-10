@@ -96,9 +96,7 @@ const NewsPart = () => {
                 setOnSuccesEditState(true)
                 console.log(data)
                 setRefreshDataNews(prev => !prev)
-            } else (
-                console.log('Loadingg')
-            )
+            }
         } catch (error) {
             console.error(error)
         } finally {
@@ -108,9 +106,45 @@ const NewsPart = () => {
 
     const [onTambahBerita, setOnTambahBerita] = useState(false) // STATE UNTUK POPUP FORM TAMBAH BERITA
     const [previewImgOnPopupTambahBerita, setPreviewImgOnPopupTambahBerita] = useState(null)
+
+    const [ImagePrevToUpload, setImagePrevToUpload] = useState(null)
+    const [judulBeritaUpload, setJudulBeritaUpload] = useState(null)
+    const [deskripsiBeritaUpload, setDeskripsiBeritaUpload] = useState(null)
+    // HANDLER POST BERITA
+    async function HandlePublishBerita() {
+        try {
+            setOnLoading(true)
+            setOnTambahBerita(false)
+            const newForm = new FormData()
+            newForm.append('file', ImagePrevToUpload)
+            newForm.append('judulBerita', judulBeritaUpload)
+            newForm.append('deskripsi', deskripsiBeritaUpload)
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/post/adm/newslanding`, {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }, body: newForm
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setImagePrevToUpload(null)
+                setJudulBeritaUpload(null)
+                setDeskripsiBeritaUpload(null)
+                setOnSuccesEdit(data.msg)
+                setOnSuccesEditState(true)
+                setRefreshDataNews(prev => !prev)
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setOnLoading(false)
+        }
+    }
+
     function HandlePreviewAddImgPopupNews(event) {
         const getFile = event.target.files[0]
         if (getFile) {
+            setImagePrevToUpload(getFile)
             setPreviewImgOnPopupTambahBerita(URL.createObjectURL(getFile))
         }
     }
@@ -186,10 +220,22 @@ const NewsPart = () => {
                                     )}
                                     <input id="dropzone-file" type="file" class="hidden" onChange={(e) => HandlePreviewAddImgPopupNews(e)} />
                                 </>}
+                            InputField={<>
+                                <div>
+                                    <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul</label>
+                                    <input type="text" id="small-input" class="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e) => setJudulBeritaUpload(e.target.value)} />
+                                </div>
+
+                                {/* DESKRIPSI INPUT */}
+                                <div class="mb-6">
+                                    <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                    <textarea type="text" id="large-input" class="outline-none block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none" onChange={(e) => setDeskripsiBeritaUpload(e.target.value)} />
+                                </div>
+                            </>}
                             button={
                                 <>
                                     <button className='text-black bg-[var(--card)] hover:bg-[var(--bg-secondary)] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' onClick={HandleCancleAddBerita}>Cancle</button>
-                                    <button type="submit" class="text-white bg-[var(--aksen-biru)] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Publish</button>
+                                    <button type="submit" class="text-white bg-[var(--aksen-biru)] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={HandlePublishBerita}>Publish</button>
                                 </>
                             }
                         />
@@ -288,7 +334,7 @@ const NewsPart = () => {
                                                     </div>
 
                                                     {/* CONTENT */}
-                                                    <div className='p-[16px] flex flex-col gap-[16px] w-full relative'>
+                                                    <div className='p-[16px] w-full flex flex-col gap-[16px] w-full relative'>
                                                         <span className='flex flex-col gap-[4px]'>
                                                             <input type="text" value={judulBeritaNews} className='text-base sm:text-base font-bold line-clamp-2' style={{ outline: '1px solid var(--warna-aksen)' }} onChange={(e) => setJudulBeritaNews(e.target.value)} />
 
@@ -325,7 +371,7 @@ const NewsPart = () => {
                                                     </div>
 
                                                     {/* CONTENT */}
-                                                    <div className='p-[16px] flex flex-col gap-[16px] relative'>
+                                                    <div className='p-[16px] w-full flex flex-col gap-[16px] relative'>
                                                         <span className='flex flex-col gap-[4px]'>
                                                             <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
                                                             <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
@@ -370,7 +416,7 @@ const NewsPart = () => {
                                                 </div>
 
                                                 {/* CONTENT */}
-                                                <div className='p-[16px] flex flex-col gap-[16px] relative'>
+                                                <div className='p-[16px] w-full flex flex-col gap-[16px] relative'>
                                                     <span className='flex flex-col gap-[4px]'>
                                                         <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
                                                         <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
@@ -416,7 +462,7 @@ const NewsPart = () => {
                                         </div>
 
                                         {/* CONTENT */}
-                                        <div className='p-[16px] flex flex-col gap-[16px]'>
+                                        <div className='p-[16px]  w-full flex flex-col gap-[16px]'>
                                             <span className='flex flex-col gap-[4px]'>
                                                 <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
                                                 <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
@@ -452,7 +498,7 @@ const NewsPart = () => {
     )
 }
 
-export const FormTambahBerita = ({ InnerBox, button }) => {
+export const FormTambahBerita = ({ InnerBox, button, InputField }) => {
     return (
         <div className='max-w-[500px]  w-full h-fit bg-white rounded-xl p-[16px] flex flex-col gap-[0px]'>
             <div className=' flex flex-col gap-[16px]'>
@@ -466,16 +512,10 @@ export const FormTambahBerita = ({ InnerBox, button }) => {
                 </div>
 
                 {/* JUDUL INPUT */}
-                <div>
-                    <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul</label>
-                    <input type="text" id="small-input" class="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                </div>
+                <span>
+                    {InputField}
+                </span>
 
-                {/* DESKRIPSI INPUT */}
-                <div class="mb-6">
-                    <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                    <textarea type="text" id="large-input" class="outline-none block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none" />
-                </div>
 
             </div>
             <span className='w-full flex items-center gap-[8px]'>

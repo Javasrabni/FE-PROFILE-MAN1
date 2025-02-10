@@ -28,11 +28,6 @@ const Home = () => {
     })
     useEffect(() => {
         localStorage.setItem('saveModeAdminStatus', JSON.stringify(onLogged))
-        if (onLogged) {
-            document.body.style.overflow = "hidden"
-        } else {
-            document.body.style.overflow = "auto"
-        }
     }, [onLogged])
 
     const { PanelEditPage, setPanelEditPage } = useContext(PanelAdminContext)
@@ -67,7 +62,7 @@ const Home = () => {
                                     </p>
                                     <ul className="text-sm leading-relaxed text-gray-500 dark:text-gray-400" style={{ listStyleType: 'decimal', paddingLeft: "16px" }}>
                                         <li>Dapat melakukan perubahan atau update pada tampilan halaman (Text, Tabel, Gambar, dll)</li>
-                                        <li>Pemantauan data terkait peserta SNPDB, serta mendownload semua data peserta (Terkolektif dalam bentuk 1 file Excel / .xlsx)</li>
+                                        <li>Pemantauan data terkait peserta SNPDB, serta mendownload semua data peserta (Terkolektif dalam bentuk 1 file Excel atau PDF)</li>
                                         <li>Membuka maupun menutup pendaftaran SNPDB, Serta dapat menetapkan kuota peserta (Jika kuota sudah terpenuhi, maka secara otomatis sistem akan menutup pendaftaran)</li>
                                         <li>Menetapkan <b>Diterima</b> dan <b>Tidak Diterimanya</b> Peserta (Akan ada halaman Dashboard, Tombol untuk menetapkannya)</li>
                                         <li>Dan Fitur lainnya</li>
