@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import { GetTokenContext } from '../../Auth/GetTokenContext'
+import { PanelAdminContext } from '../../../Context/ControlPanelAdmin/PanelAdminCtx'
 
 export const PrestasiMadrasah = () => {
+    // CONTEXT TO SAVE / GET TOKEN
+    const { token, setToken } = useContext(GetTokenContext)
+    const { PanelEditPage, setPanelEditPage } = useContext(PanelAdminContext)
+
     // GET OUTPUT PRESTASI FROM ADMIN
     const [outputPrestasi, setOutputPrestasi] = useState([])
     useEffect(() => {
         const getPrestasiMan = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BE_URL}/prestasi`, {
+                const response = await fetch(`${process.env.REACT_APP_BE_URL}/get/adm/prestasiman`, {
                     method: 'GET'
                 })
                 if (response.ok) {
@@ -36,7 +42,10 @@ export const PrestasiMadrasah = () => {
         }
     }
 
+
+
     return (
+
         <div>
             {/* JUDUL */}
             <div className='w-full h-[60px] flex flex-col gap-[2px] mb-[16px]'>
@@ -45,36 +54,58 @@ export const PrestasiMadrasah = () => {
             </div>
 
             <div className='overflow-x-auto pb-[16px] rounded-lg'>
-                <table className="min-w-full border-collapse border border-gray-300 ">
-                    <thead>
-                        {/* BG-GRAY-100 */}
-                        <tr className="bg-[var(--warna-aksen)]">
-                            <th className="border border-gray-300 px-4 py-2 text-left">Prestasi</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left">Tingkat</th>
-                            <th className="border border-gray-300 px-4 py-2 text-left">Deskripsi</th>
-                            {/* <th className="border border-gray-300 px-4 py-2 text-left">File Pendukung</th> */}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {outputPrestasi.map((item, index) =>
-                            <tr key={index} className="odd:bg-white even:bg-gray-100 text-sm sm:text-sm" onClick={() => console.log(item.id)}>
-                                <td className="border border-gray-300 px-4 py-2 font-[inter]">{item.prestasi === '' || null ? '-' : item.prestasi}</td>
-                                <td className="border border-gray-300 px-4 py-2 font-[inter]">{item.tingkat === '' || null ? '-' : item.tingkat}</td>
-                                <td className="border border-gray-300 px-4 py-2 font-[inter]">{item.deskripsi === '' || null ? '-' : item.deskripsi}</td>
-                                {/* <td className="border border-gray-300 px-4 py-2">
+                <div class="relative overflow-x-auto sm:rounded-lg">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Prestasi
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Tingkat
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Tahun
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Deskripsi
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    File Pendukung
+                                </th>
+                                {token && PanelEditPage && (
+                                    <th scope="col" class="px-6 py-3">
+                                        Sunting
+                                    </th>
+                                )}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {outputPrestasi.map((item, index) =>
+                                <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200" onClick={() => console.log(item.id)}>
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
+                                    <td className="px-6 py-4">{item.tingkat === '' || null ? '-' : item.tingkat}</td>
+                                    <td className="px-6 py-4">{item.tahun === '' || null ? '-' : item.tahun}</td>
+                                    <td className="px-6 py-4">{item.deskripsi === '' || null ? '-' : item.deskripsi}</td>
+                                    <td className="px-6 py-4">{item.filePendukung === '' || null ? '-' : item.filePendukung}</td>
+                                    {token && PanelEditPage && (
+                                        <td class="px-6 py-4">
+                                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                        </td>
+                                    )}
+                                    {/* <td className="border border-gray-300 px-4 py-2">
                                 <div className='flex flex-row items-center'>
                                     <button className='bg-[green] w-full h-full text-white p-[4px]'>Edit</button>
                                     <button className='bg-[tomato] w-full h-full text-white p-[4px]' onClick={() => HandleDeletePrestasi(item.id)}>Delete</button>
                                 </div>
                             </td> */}
 
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
-
         </div>
     )
 }
