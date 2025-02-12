@@ -6,7 +6,7 @@ export const PanelAdminProvider = ({ children }) => {
     // STATE UNTUK EDIT PAGE (CONTROL PANEL ADMIN)
     const [PanelEditPage, setPanelEditPage] = useState(() => {
         const saveStatus = localStorage.getItem('savePanelEditPageStatus')
-        return saveStatus ? JSON.parse(saveStatus) : false
+        return saveStatus ? JSON.parse(saveStatus) : true
     })
     useEffect(() => {
         localStorage.setItem('savePanelEditPageStatus', JSON.stringify(PanelEditPage))

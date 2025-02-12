@@ -15,21 +15,128 @@ const DataProfile = () => {
     // CONTEXT TO SAVE / GET TOKEN
     const { token, setToken } = useContext(GetTokenContext)
     const { PanelEditPage, setPanelEditPage } = useContext(PanelAdminContext) // ON EDIT PANEL ADMIN
-    const [onEditingNewsLanding, setOnEditingProfileData] = useState(null) // GET INDEX FOR EDITING
-    const [onEditProfileData, setOnEditProfileData] = useState(false) // ON EDIT MODE ?
+    const [onSuccesCopyState, setonSuccesCopyState] = useState(false)
 
     // STATE EDITING
     const [onEditTentang, setOnEditTentang] = useState(false)
     const [onEditAkreditasi, setOnEditAkreditasi] = useState(false)
     const [onEditAlamat, setOnEditAlamat] = useState(false)
-    const [onEditNSM, setOnEditNPSM] = useState(false)
+    const [onEditNSM, setOnEditNSM] = useState(false)
+    const [onEditNPSM, setOnEditNPSM] = useState(false)
 
     // DATA VALUE
     const [tentang, setTentang] = useState(null)
+    const [backupValueTentang, setBackupValueTentang] = useState(null)
+    async function HandlePatchProfileDataTentang() {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, body: JSON.stringify({ tentang: tentang })
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setOnSuccesEdit(data.msg)
+                setOnSuccesEditState(true)
+                setRefreshData(prev => !prev)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+
+    }
+
     const [akreditasi, setAkreditasi] = useState(null)
+    const [backupValueAkre, setBackupValueAkre] = useState(null)
+    async function HandlePatchProfileDataAkre() {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, body: JSON.stringify({ akreditasi: akreditasi })
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setOnSuccesEdit(data.msg)
+                setOnSuccesEditState(true)
+                setRefreshData(prev => !prev)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const [alamat, setAlamat] = useState(null)
+    const [backupValueAlamat, setBackupValueAlamat] = useState(null)
+    async function HandlePatchProfileDataAlamat() {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, body: JSON.stringify({ alamat: alamat })
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setOnSuccesEdit(data.msg)
+                setOnSuccesEditState(true)
+                setRefreshData(prev => !prev)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const [nsm, setNsm] = useState(null)
+    const [backupValueNSM, setBackupValueNSM] = useState(null)
+    async function HandlePatchProfileDataNSM() {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, body: JSON.stringify({ nsm: nsm })
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setOnSuccesEdit(data.msg)
+                setOnSuccesEditState(true)
+                setRefreshData(prev => !prev)
+
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const [npsm, setNpsm] = useState(null)
+    const [backupValueNPSM, setBackupValueNPSM] = useState(null)
+    async function HandlePatchProfileDataNPSM() {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, body: JSON.stringify({ npsm: npsm })
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setOnSuccesEdit(data.msg)
+                setOnSuccesEditState(true)
+                setRefreshData(prev => !prev)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 
     // SAVE EDITING NEWS
     const [onSuccesEdit, setOnSuccesEdit] = useState(null)
@@ -54,10 +161,19 @@ const DataProfile = () => {
                 if (response.ok) {
                     const data = await response.json()
                     setTentang(data[0].tentang)
+                    setBackupValueTentang(data[0].tentang)
+
                     setAkreditasi(data[0].akreditasi)
+                    setBackupValueAkre(data[0].akreditasi)
+
                     setAlamat(data[0].alamat)
+                    setBackupValueAlamat(data[0].alamat)
+
                     setNsm(data[0].nsm)
+                    setBackupValueNSM(data[0].nsm)
+
                     setNpsm(data[0].npsm)
+                    setBackupValueNPSM(data[0].npsm)
                 }
             } catch (err) {
                 console.error(err)
@@ -71,7 +187,7 @@ const DataProfile = () => {
     async function CopyData(nameField, value) {
         try {
             await navigator.clipboard.writeText(value)
-            setOnSuccesEditState(true)
+            setonSuccesCopyState(true)
             setOnCopyText(`${nameField} Berhasil disalin!`)
         } catch (err) {
             console.error(err)
@@ -80,13 +196,22 @@ const DataProfile = () => {
 
     return (
         <>
+            {/* POPUP SUKSES UPDATE */}
+            {onSuccesEditState && (
+                <SuccessPopup
+                    heading={"Berhasil Update!"}
+                    subHeading={onSuccesEdit}
+                    button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setOnSuccesEditState(false)}>Tutup</button>}
+
+                />
+            )}
 
             {/* POPUP SUKSES COPY */}
-            {onSuccesEditState && (
+            {onSuccesCopyState && (
                 <SuccessPopup
                     heading={"Berhasil disalin"}
                     subHeading={onCopyText}
-                    button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setOnSuccesEditState(false)}>Tutup</button>}
+                    button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setonSuccesCopyState(false)}>Tutup</button>}
 
                 />
             )}
@@ -125,22 +250,24 @@ const DataProfile = () => {
                         {/* TENTANG */}
                         {onEditTentang ? (
                             <span className='flex flex-col gap-[16px] w-full h-full'>
-                                <textarea className='w-full text-sm sm:text-sm text-[var(--text-secondary)] min-h-[120px] resize-none p-[16px]' value={tentang} style={{ outline: '1px solid var(--warna-aksen)' }} />
-                                {/* BUTTON EDIT BERITA */}
+                                <textarea className='w-full text-sm sm:text-sm text-[var(--text-secondary)] min-h-[120px] resize-none p-[16px]' value={tentang} style={{ outline: '1px solid var(--warna-aksen)' }} onChange={(e) => setTentang(e.target.value)} autoFocus />
+                                {/* BUTTON EDIT */}
                                 <div className=' w-fit flex flex-row gap-[16px] items-center'>
-                                    <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={''}>
+                                    <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative'>
                                         <CheckIcon
                                             sizeOnPx={20}
                                             color={"#005eff"} />
-                                        <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
+                                        <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataTentang}>Simpan</p>
                                     </span>
-                                    <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => setOnEditTentang(false)}>Cancle</p>
+                                    <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setTentang(backupValueTentang); setOnEditTentang(false); }}>Cancle</p>
                                 </div>
                             </span>
                         ) : (
                             <span className='flex flex-col gap-[16px] w-full h-full'>
-                                <textarea className='w-full text-sm sm:text-sm text-[var(--text-secondary)] min-h-[120px] resize-none p-[16px]' value={tentang} style={{ outline: '1px solid var(--aksen-biru)' }} />
-                                {/* BUTTON EDIT BERITA */}
+                                <span >
+                                    <p className=' w-full text-sm sm:text-sm text-[var(--text-secondary)] p-[16px]' style={{ outline: '1px solid var(--aksen-biru)' }}>{tentang}</p>
+                                </span>
+                                {/* BUTTON EDIT */}
                                 <div>
                                     <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEditTentang(prev => !prev)}>
                                         <PencilIcon
@@ -162,23 +289,23 @@ const DataProfile = () => {
                                         <li>
                                             <span className='w-full flex flex-row items-center justify-between'>
                                                 <p>Akreditasi</p>
-                                                <p className='text-[var(--text-primary)] font-bold py-[4px] px-[16px]' style={{outline: '1px solid var(--warna-aksen)'}}>{akreditasi}</p>
+                                                <input className='text-[var(--text-primary)] font-bold py-[4px] px-[16px]' style={{ outline: '1px solid var(--warna-aksen)' }} value={akreditasi} autoFocus type='text' onChange={(e) => setAkreditasi(e.target.value)} />
                                             </span>
-                                            {/* BUTTON EDIT BERITA */}
+                                            {/* BUTTON EDIT */}
                                             <div className=' w-fit flex flex-row gap-[16px] items-center pl-[32px]'>
-                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={''}>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative'>
                                                     <CheckIcon
                                                         sizeOnPx={20}
                                                         color={"#005eff"} />
-                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataAkre}>Simpan</p>
                                                 </span>
-                                                <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => setOnEditAkreditasi(false)}>Cancle</p>
+                                                <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setAkreditasi(backupValueAkre); setOnEditAkreditasi(false) }}>Cancle</p>
                                             </div>
                                         </li>
                                     ) : (
                                         <li>
                                             <span className='w-full flex flex-row items-center justify-between'>
-                                                {/* BUTTON EDIT BERITA */}
+                                                {/* BUTTON EDIT */}
                                                 <p>Akreditasi</p>
                                                 <p className='text-[var(--text-primary)] font-bold py-[4px] px-[16px]' style={{ outline: '1px solid var(--aksen-biru)' }}>{akreditasi}</p>
                                             </span>
@@ -193,29 +320,108 @@ const DataProfile = () => {
                                         </li>
                                     )}
 
-                                    {/* {onEditAlamat ? (
+                                    {onEditAlamat ? (
+                                        <li>
+                                            <span className='w-full flex flex-row items-center justify-between' >
+                                                <p>Alamat</p>
+                                                <input type='text' className='text-[var(--text-primary)] py-[4px] px-[16px] w-[50%]' value={alamat} style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setAlamat(e.target.value)} />
+                                            </span>
+                                            {/* BUTTON EDIT */}
+                                            <div className=' w-fit flex flex-row gap-[16px] items-center pl-[32px]'>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative'>
+                                                    <CheckIcon
+                                                        sizeOnPx={20}
+                                                        color={"#005eff"} />
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataAlamat}>Simpan</p>
+                                                </span>
+                                                <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setAlamat(backupValueAlamat); setOnEditAlamat(false); }}>Cancle</p>
+                                            </div>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <span className='w-full flex flex-row items-center justify-between' >
+                                                <p>Alamat</p>
+                                                <p className='text-[var(--text-primary)] py-[4px] px-[16px]' onClick={() => CopyData('Alamat', alamat)} style={{ outline: '1px solid var(--aksen-biru)' }}>{alamat}</p>
+                                            </span>
+                                            <div className='pl-[32px]'>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEditAlamat(prev => !prev)}>
+                                                    <PencilIcon
+                                                        sizeOnPx={20}
+                                                        color={"#005eff"} />
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    )}
 
-                                    )} */}
+                                    {onEditNSM ? (
+                                        <li>
+                                            <span className='w-full flex flex-row items-center justify-between'>
+                                                <p>NSM (Nomor Statistik Madrasah)</p>
+                                                <input type='text' value={nsm} className='text-[var(--text-primary)] py-[4px] px-[16px]' style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setNsm(e.target.value)} />
+                                            </span>
+                                            {/* BUTTON EDIT */}
+                                            <div className=' w-fit flex flex-row gap-[16px] items-center pl-[32px]'>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative'>
+                                                    <CheckIcon
+                                                        sizeOnPx={20}
+                                                        color={"#005eff"} />
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataNSM}>Simpan</p>
+                                                </span>
+                                                <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setNsm(backupValueNSM); setOnEditNSM(false); }}>Cancle</p>
+                                            </div>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <span className='w-full flex flex-row items-center justify-between'>
+                                                <p>NSM (Nomor Statistik Madrasah)</p>
+                                                <p className='text-[var(--text-primary)] py-[4px] px-[16px]' onClick={() => CopyData('NSM', nsm)} style={{ outline: '1px solid var(--aksen-biru)' }}>{nsm}</p>
+                                            </span>
+                                            <div className='pl-[32px]'>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEditNSM(prev => !prev)}>
+                                                    <PencilIcon
+                                                        sizeOnPx={20}
+                                                        color={"#005eff"} />
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    )}
 
+                                    {onEditNPSM ? (
+                                        <li>
+                                            <span className='w-full flex flex-row items-center justify-between'>
+                                                <p>NPSN (Nomor Pokok Sekolah Nasional)</p>
+                                                <input type='text' className='text-[var(--text-primary)] px-[16px] py-[4px]' value={npsm} style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setNpsm(e.target.value)} />
+                                            </span>
+                                            {/* BUTTON EDIT */}
+                                            <div className=' w-fit flex flex-row gap-[16px] items-center pl-[32px]'>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative'>
+                                                    <CheckIcon
+                                                        sizeOnPx={20}
+                                                        color={"#005eff"} />
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataNPSM}>Simpan</p>
+                                                </span>
+                                                <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setNpsm(backupValueNPSM); setOnEditNPSM(false); }}>Cancle</p>
+                                            </div>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <span className='w-full flex flex-row items-center justify-between'>
+                                                <p>NPSN (Nomor Pokok Sekolah Nasional)</p>
+                                                <p className='text-[var(--text-primary)] py-[4px] px-[16px]' onClick={() => CopyData('NPSM', npsm)} style={{ outline: '1px solid var(--aksen-biru)' }}>{npsm}</p>
+                                            </span>
+                                            <div className='pl-[32px]'>
+                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => setOnEditNPSM(prev => !prev)}>
+                                                    <PencilIcon
+                                                        sizeOnPx={20}
+                                                        color={"#005eff"} />
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    )}
 
-                                    <li>
-                                        <span className='w-full flex flex-row items-center justify-between' >
-                                            <p>Alamat</p>
-                                            <p className='text-[var(--text-primary)]' onClick={() => CopyData('Alamat', alamat)}><i class="fa-regular fa-copy" ></i> {alamat}</p>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span className='w-full flex flex-row items-center justify-between'>
-                                            <p>NSM (Nomor Statistik Madrasah)</p>
-                                            <p className='text-[var(--text-primary)]' onClick={() => CopyData('NSM', nsm)}><i class="fa-regular fa-copy"></i> {nsm}</p>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span className='w-full flex flex-row items-center justify-between'>
-                                            <p>NPSN (Nomor Pokok Sekolah Nasional)</p>
-                                            <p className='text-[var(--text-primary)]' onClick={() => CopyData('NPSM', npsm)}><i class="fa-regular fa-copy" ></i> {npsm}</p>
-                                        </span>
-                                    </li>
                                 </ul>
                             </div>
                         </div>

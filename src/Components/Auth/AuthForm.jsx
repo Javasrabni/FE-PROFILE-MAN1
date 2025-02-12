@@ -4,12 +4,18 @@ import { GetTokenContext } from './GetTokenContext'
 import NavigatePage from '../Navigate/useNavigate'
 import { useLocation } from 'react-router-dom'
 
+import { LoadingEffect } from '../Icon/ListIcon'
+import { SuccessPopup } from '../Body-section/Landing/LandingPage'
+
 export const AuthForm = () => {
     const location = useLocation()
     const navigateTo = NavigatePage()
 
     const { token, setToken } = useContext(GetTokenContext) // CONTEXT TO SAVE / GET TOKEN
-    console.log(token)
+    const [onLoading, setOnLoading] = useState(false)
+    const [onTextStatusLogin, setOnTextStatusLogin] = useState("Mohon tunggu, proses autentikasi")
+    const [authStatus, setAuthStatus] = useState(false)
+
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
 
@@ -23,6 +29,8 @@ export const AuthForm = () => {
 
     // POST LOGIN
     async function HandleLoginAdmin() {
+        setOnLoading(true)
+        setAuthStatus(true)
         try {
             const response = await fetch(`http://localhost:8000/AdminAuth`, {
                 method: "POST",
@@ -32,20 +40,38 @@ export const AuthForm = () => {
             })
             if (response.ok) {
                 const { msg, token } = await response.json()
-                setToken(token)
-                alert(msg)
-                navigateTo('/')
+                setAuthStatus(false)
+                setOnTextStatusLogin(msg)
+                setTimeout(() => {
+                    setToken(token)
+                    navigateTo('/')
+                }, 3000)
             } else {
-                console.log('Password sala')
+                console.log('Password salah')
             }
         } catch (err) {
             console.error("Error pada sisi Server", err)
+        } finally {
+            setTimeout(() => {
+                setOnLoading(false)
+                setAuthStatus(false)
+            }, 3000)
+            // clearTimeout(delay)
         }
     }
 
 
     return (
         <>
+
+            {/* POPUP LOADING */}
+            {onLoading && (
+                <SuccessPopup
+                    heading={authStatus && <LoadingEffect text={'Loading..'} />}
+                    subHeading={onTextStatusLogin}
+                />
+            )}
+
             <style>
                 {`
                     .input-class input {

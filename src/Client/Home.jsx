@@ -84,11 +84,9 @@ const Home = () => {
             )}
 
             {/* CONTROL PANEL ADMIN */}
-            {
-                token && (
-                    <ControlPanelAdmin />
-                )
-            }
+            {token && (
+                <ControlPanelAdmin />
+            )}
 
             {/* SAVE BUTTON JIKA EDIT PAGE DI ADMIN PANEL AKTIF (TRUE) */}
             {/* {token && PanelEditPage && (
@@ -184,7 +182,7 @@ export const ControlPanelAdmin = () => {
     const { PanelEditPage, setPanelEditPage } = useContext(PanelAdminContext)
     const [onEditActive, setOnEditActive] = useState(() => {
         const saveState = localStorage.getItem('saveSatetOnEdit')
-        return saveState ? JSON.parse(saveState) : false
+        return saveState ? JSON.parse(saveState) : true
     })
     useEffect(() => {
         localStorage.setItem('saveSatetOnEdit', JSON.stringify(PanelEditPage))
