@@ -174,7 +174,7 @@ const NewsPart = () => {
 
 
     const isMobile = useMediaQuery({ maxWidth: 640 })
-    const isTablet = useMediaQuery({ minWidth: 641, maxWidth: 1079 });
+    const isTablet = useMediaQuery({ minWidth: 641 });
     const isDesktop = useMediaQuery({ minWidth: 1080 });
 
     return (
@@ -303,112 +303,159 @@ const NewsPart = () => {
                         </div>
                     )}
 
-
-                    {token && PanelEditPage ? (
+                    {isTablet && (
                         <>
-                            {onEditNewsLanding ? (
-                                <div className='flex flex-col gap-[16px]' >
-                                    {newsLanding && newsLanding.map(item =>
-                                        <div className='flex flex-col gap-[32px]' style={{ outline: onEditingNewsLanding === item.id && '1px solid var(--warna-aksen)', padding: onEditingNewsLanding === item.id && '16px' }}>
+                            {token && PanelEditPage ? (
+                                <>
+                                    {onEditNewsLanding ? (
+                                        <div className='flex flex-col gap-[16px]' >
+                                            {newsLanding && newsLanding.map(item =>
+                                                <div className='flex flex-col gap-[32px]' style={{ outline: onEditingNewsLanding === item.id && '1px solid var(--warna-aksen)', padding: onEditingNewsLanding === item.id && '16px' }}>
 
-                                            {onEditingNewsLanding === item.id ? (
-                                                <section className='h-[256px] w-full flex flex-row justify-between'>
+                                                    {onEditingNewsLanding === item.id ? (
+                                                        <section className='h-[256px] w-full flex flex-row justify-between'>
 
-                                                    {/* GAMBAR / THUMBNAIL BERITA */}
-                                                    <div className='bg-[var(--bg-secondary)] w-[464px] h-[256px] rounded-xl shrink-0 relative cursor-pointer' style={{ border: "1px solid var(--border)" }}>
+                                                            {/* GAMBAR / THUMBNAIL BERITA */}
+                                                            <div className='bg-[var(--bg-secondary)] w-[464px] h-[256px] rounded-xl shrink-0 relative cursor-pointer' style={{ border: "1px solid var(--border)" }}>
 
-                                                        {/* ICON CHANGE IMG */}
-                                                        <div className='absolute w-full h-full z-[3] flex flex-col gap-[4px] items-center justify-center text-[var(--aksen-biru-2)]' onClick={() => inputFileRefTrigger.current.click()}>
-                                                            <span className='bg-[var(--text-primary)] px-[16px] py-[6px] rounded-lg'>
-                                                                <ImageIcon size={6} />
-                                                            </span>
-                                                            <p className='text-black text-sm font-medium'>Ganti Gambar</p>
+                                                                {/* ICON CHANGE IMG */}
+                                                                <div className='absolute w-full h-full z-[3] flex flex-col gap-[4px] items-center justify-center text-[var(--aksen-biru-2)]' onClick={() => inputFileRefTrigger.current.click()}>
+                                                                    <span className='bg-[var(--text-primary)] px-[16px] py-[6px] rounded-lg'>
+                                                                        <ImageIcon size={6} />
+                                                                    </span>
+                                                                    <p className='text-black text-sm font-medium'>Ganti Gambar</p>
+                                                                </div>
+
+                                                                <input type="file" ref={inputFileRefTrigger} onChange={(e) => HandleUploadImage(e)} className='hidden' />
+
+                                                                {/* GREEN OVERLAY IMG */}
+                                                                <div className='w-full h-full bg-[var(--warna-aksen)] opacity-[60%] absolute rounded-xl' />
+
+                                                                <img src={gambarBeritaNews} alt={`Gambar ${item.judulBerita}`} className=' h-full w-full object-cover rounded-xl' loading='lazy' />
+                                                            </div>
+
+                                                            {/* CONTENT */}
+                                                            <div className='p-[16px] w-full flex flex-col gap-[16px] w-full relative'>
+                                                                <span className='flex flex-col gap-[4px]'>
+                                                                    <input type="text" value={judulBeritaNews} className='text-base sm:text-base font-bold line-clamp-2' style={{ outline: '1px solid var(--warna-aksen)' }} onChange={(e) => setJudulBeritaNews(e.target.value)} />
+
+                                                                    <textarea className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4 resize-none" style={{ outline: '1px solid var(--warna-aksen)' }} value={deskripsiBeritaNews} onChange={(e) => setDeskripsiBeritaNews(e.target.value)} />
+                                                                </span>
+                                                                <span>
+                                                                    <p className='text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
+                                                                </span>
+
+                                                                {/* BUTTON EDIT BERITA */}
+                                                                {onEditingNewsLanding === item.id && (
+                                                                    <div className=' w-fit flex flex-row gap-[16px] items-center'>
+                                                                        <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={HandleSaveNewsLanding}>
+                                                                            <CheckIcon
+                                                                                sizeOnPx={20}
+                                                                                color={"#005eff"} />
+                                                                            <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
+                                                                        </span>
+                                                                        <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setOnEditNewsLanding(false); setOnEditingNewsLanding(null) }}>Cancle</p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            {/* CTA BUTTON */}
+                                                            <div className='w-fit h-full flex items-center justify-end'>
+                                                                <button className='rounded-lg text-[var(--text-primary)] font-medium text-sm bg-[var(--warna-aksen)] px-[16px] py-[6px]'>Selengkapnya</button>
+                                                            </div>
+                                                        </section>
+                                                    ) : (
+                                                        <section className='h-[256px] w-full flex flex-row justify-between'>
+                                                            {/* GAMBAR / THUMBNAIL BERITA */}
+                                                            <div className='bg-[var(--bg-secondary)] w-[464px] h-[256px] rounded-xl shrink-0' style={{ border: "1px solid var(--border)" }}>
+                                                                <img src={item.thumbnail} alt={`Gambar ${item.judulBerita}`} className=' h-full w-full object-cover rounded-xl' loading='lazy' />
+                                                            </div>
+
+                                                            {/* CONTENT */}
+                                                            <div className='p-[16px] w-full flex flex-col gap-[16px] relative'>
+                                                                <span className='flex flex-col gap-[4px]'>
+                                                                    <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
+                                                                    <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
+                                                                        {item.deskripsi}
+                                                                    </p>
+                                                                </span>
+                                                                <span>
+                                                                    <p className='text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
+                                                                </span>
+
+                                                                {/* BUTTON EDIT BERITA */}
+                                                                {onEditingNewsLanding === item.id && (
+                                                                    <div className=' w-fit flex flex-row gap-[16px] items-center'>
+                                                                        <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={HandleSaveNewsLanding}>
+                                                                            <CheckIcon
+                                                                                sizeOnPx={20}
+                                                                                color={"#005eff"} />
+                                                                            <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
+                                                                        </span>
+                                                                        <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setOnEditNewsLanding(false); setOnEditingNewsLanding(null) }}>Cancle</p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            {/* CTA BUTTON */}
+                                                            <div className='w-fit h-full flex items-center justify-end'>
+                                                                <button className='rounded-lg text-[var(--text-primary)] font-medium text-sm bg-[var(--warna-aksen)] px-[16px] py-[6px]'>Selengkapnya</button>
+                                                            </div>
+                                                        </section>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className='flex flex-col gap-[16px] p-[16px]' style={{ outline: !onEditNewsLanding && '1px solid #005eff' }} >
+                                            {newsLanding && newsLanding.map((item) =>
+                                                <div className='flex flex-col gap-[32px]' key={item.id}>
+                                                    <section className='h-[256px] w-full flex flex-row justify-between'>
+                                                        {/* GAMBAR / THUMBNAIL BERITA */}
+                                                        <div className='bg-[var(--bg-secondary)] w-[464px] h-[256px] rounded-xl shrink-0' style={{ border: "1px solid var(--border)" }}>
+                                                            <img src={item.thumbnail} alt={`Gambar ${item.judulBerita}`} className=' h-full w-full object-cover rounded-xl' loading='lazy' />
                                                         </div>
 
-                                                        <input type="file" ref={inputFileRefTrigger} onChange={(e) => HandleUploadImage(e)} className='hidden' />
+                                                        {/* CONTENT */}
+                                                        <div className='p-[16px] w-full flex flex-col gap-[16px] relative'>
+                                                            <span className='flex flex-col gap-[4px]'>
+                                                                <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
+                                                                <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
+                                                                    {item.deskripsi}
+                                                                </p>
+                                                            </span>
 
-                                                        {/* GREEN OVERLAY IMG */}
-                                                        <div className='w-full h-full bg-[var(--warna-aksen)] opacity-[60%] absolute rounded-xl' />
+                                                            <span>
+                                                                <p className='text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
+                                                            </span>
 
-                                                        <img src={gambarBeritaNews} alt={`Gambar ${item.judulBerita}`} className=' h-full w-full object-cover rounded-xl' loading='lazy' />
-                                                    </div>
-
-                                                    {/* CONTENT */}
-                                                    <div className='p-[16px] w-full flex flex-col gap-[16px] w-full relative'>
-                                                        <span className='flex flex-col gap-[4px]'>
-                                                            <input type="text" value={judulBeritaNews} className='text-base sm:text-base font-bold line-clamp-2' style={{ outline: '1px solid var(--warna-aksen)' }} onChange={(e) => setJudulBeritaNews(e.target.value)} />
-
-                                                            <textarea className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4 resize-none" style={{ outline: '1px solid var(--warna-aksen)' }} value={deskripsiBeritaNews} onChange={(e) => setDeskripsiBeritaNews(e.target.value)} />
-                                                        </span>
-                                                        <span>
-                                                            <p className='text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
-                                                        </span>
-
-                                                        {/* BUTTON EDIT BERITA */}
-                                                        {onEditingNewsLanding === item.id && (
-                                                            <div className=' w-fit flex flex-row gap-[16px] items-center'>
-                                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={HandleSaveNewsLanding}>
-                                                                    <CheckIcon
+                                                            {/* BUTTON EDIT BERITA */}
+                                                            <div className=''>
+                                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => { setOnEditNewsLanding(prev => !prev); setOnEditingNewsLanding(item.id) }}>
+                                                                    <PencilIcon
                                                                         sizeOnPx={20}
                                                                         color={"#005eff"} />
-                                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
+                                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
                                                                 </span>
-                                                                <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setOnEditNewsLanding(false); setOnEditingNewsLanding(null) }}>Cancle</p>
                                                             </div>
-                                                        )}
-                                                    </div>
+                                                        </div>
 
-                                                    {/* CTA BUTTON */}
-                                                    <div className='w-fit h-full flex items-center justify-end'>
-                                                        <button className='rounded-lg text-[var(--text-primary)] font-medium text-sm bg-[var(--warna-aksen)] px-[16px] py-[6px]'>Selengkapnya</button>
-                                                    </div>
-                                                </section>
-                                            ) : (
-                                                <section className='h-[256px] w-full flex flex-row justify-between'>
-                                                    {/* GAMBAR / THUMBNAIL BERITA */}
-                                                    <div className='bg-[var(--bg-secondary)] w-[464px] h-[256px] rounded-xl shrink-0' style={{ border: "1px solid var(--border)" }}>
-                                                        <img src={item.thumbnail} alt={`Gambar ${item.judulBerita}`} className=' h-full w-full object-cover rounded-xl' loading='lazy' />
-                                                    </div>
-
-                                                    {/* CONTENT */}
-                                                    <div className='p-[16px] w-full flex flex-col gap-[16px] relative'>
-                                                        <span className='flex flex-col gap-[4px]'>
-                                                            <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
-                                                            <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
-                                                                {item.deskripsi}
-                                                            </p>
-                                                        </span>
-                                                        <span>
-                                                            <p className='text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
-                                                        </span>
-
-                                                        {/* BUTTON EDIT BERITA */}
-                                                        {onEditingNewsLanding === item.id && (
-                                                            <div className=' w-fit flex flex-row gap-[16px] items-center'>
-                                                                <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={HandleSaveNewsLanding}>
-                                                                    <CheckIcon
-                                                                        sizeOnPx={20}
-                                                                        color={"#005eff"} />
-                                                                    <p className='font-[inter] text-white text-xs sm:text-sm '>Simpan</p>
-                                                                </span>
-                                                                <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setOnEditNewsLanding(false); setOnEditingNewsLanding(null) }}>Cancle</p>
-                                                            </div>
-                                                        )}
-                                                    </div>
-
-                                                    {/* CTA BUTTON */}
-                                                    <div className='w-fit h-full flex items-center justify-end'>
-                                                        <button className='rounded-lg text-[var(--text-primary)] font-medium text-sm bg-[var(--warna-aksen)] px-[16px] py-[6px]'>Selengkapnya</button>
-                                                    </div>
-                                                </section>
+                                                        {/* CTA BUTTON */}
+                                                        <div className='w-fit h-full flex items-center justify-end'>
+                                                            <button className='rounded-lg text-[var(--text-primary)] font-medium text-sm bg-[var(--warna-aksen)] px-[16px] py-[6px]'>Selengkapnya</button>
+                                                        </div>
+                                                    </section>
+                                                </div>
                                             )}
                                         </div>
                                     )}
-                                </div>
+
+
+                                </>
                             ) : (
-                                <div className='flex flex-col gap-[16px] p-[16px]' style={{ outline: !onEditNewsLanding && '1px solid #005eff' }} >
-                                    {newsLanding && newsLanding.map((item) =>
-                                        <div className='flex flex-col gap-[32px]' key={item.id}>
+                                <div className='flex flex-col gap-[16px]'>
+                                    {newsLanding && newsLanding.map(item =>
+                                        <div className='flex flex-col gap-[32px]'>
                                             <section className='h-[256px] w-full flex flex-row justify-between'>
                                                 {/* GAMBAR / THUMBNAIL BERITA */}
                                                 <div className='bg-[var(--bg-secondary)] w-[464px] h-[256px] rounded-xl shrink-0' style={{ border: "1px solid var(--border)" }}>
@@ -416,27 +463,17 @@ const NewsPart = () => {
                                                 </div>
 
                                                 {/* CONTENT */}
-                                                <div className='p-[16px] w-full flex flex-col gap-[16px] relative'>
+                                                <div className='p-[16px]  w-full flex flex-col gap-[16px]'>
                                                     <span className='flex flex-col gap-[4px]'>
                                                         <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
                                                         <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
                                                             {item.deskripsi}
                                                         </p>
-                                                    </span>
 
+                                                    </span>
                                                     <span>
                                                         <p className='text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
                                                     </span>
-
-                                                    {/* BUTTON EDIT BERITA */}
-                                                    <div className=''>
-                                                        <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => { setOnEditNewsLanding(prev => !prev); setOnEditingNewsLanding(item.id) }}>
-                                                            <PencilIcon
-                                                                sizeOnPx={20}
-                                                                color={"#005eff"} />
-                                                            <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
-                                                        </span>
-                                                    </div>
                                                 </div>
 
                                                 {/* CTA BUTTON */}
@@ -448,41 +485,7 @@ const NewsPart = () => {
                                     )}
                                 </div>
                             )}
-
-
                         </>
-                    ) : (
-                        <div className='flex flex-col gap-[16px]'>
-                            {newsLanding && newsLanding.map(item =>
-                                <div className='flex flex-col gap-[32px]'>
-                                    <section className='h-[256px] w-full flex flex-row justify-between'>
-                                        {/* GAMBAR / THUMBNAIL BERITA */}
-                                        <div className='bg-[var(--bg-secondary)] w-[464px] h-[256px] rounded-xl shrink-0' style={{ border: "1px solid var(--border)" }}>
-                                            <img src={item.thumbnail} alt={`Gambar ${item.judulBerita}`} className=' h-full w-full object-cover rounded-xl' loading='lazy' />
-                                        </div>
-
-                                        {/* CONTENT */}
-                                        <div className='p-[16px]  w-full flex flex-col gap-[16px]'>
-                                            <span className='flex flex-col gap-[4px]'>
-                                                <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
-                                                <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
-                                                    {item.deskripsi}
-                                                </p>
-
-                                            </span>
-                                            <span>
-                                                <p className='text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
-                                            </span>
-                                        </div>
-
-                                        {/* CTA BUTTON */}
-                                        <div className='w-fit h-full flex items-center justify-end'>
-                                            <button className='rounded-lg text-[var(--text-primary)] font-medium text-sm bg-[var(--warna-aksen)] px-[16px] py-[6px]'>Selengkapnya</button>
-                                        </div>
-                                    </section>
-                                </div>
-                            )}
-                        </div>
                     )}
                 </div >
 

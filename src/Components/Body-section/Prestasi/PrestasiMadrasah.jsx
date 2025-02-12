@@ -54,7 +54,7 @@ export const PrestasiMadrasah = () => {
             </div>
 
             <div className='overflow-x-auto pb-[16px] rounded-lg'>
-                <div class="relative overflow-x-auto sm:rounded-lg">
+                <div class="relative overflow-x-auto sm:rounded-lg border-r border-l border-gray-50">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -82,7 +82,7 @@ export const PrestasiMadrasah = () => {
                         </thead>
                         <tbody>
                             {outputPrestasi.map((item, index) =>
-                                <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200" onClick={() => console.log(item.id)}>
+                                <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-50 border-b" onClick={() => console.log(item.id)}>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
                                     <td className="px-6 py-4">{item.tingkat === '' || null ? '-' : item.tingkat}</td>
                                     <td className="px-6 py-4">{item.tahun === '' || null ? '-' : item.tahun}</td>
