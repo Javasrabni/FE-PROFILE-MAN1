@@ -16,6 +16,9 @@ const PrestasiSiswa = () => {
 
     const [refreshData, setRefreshData] = useState(false) //REFRESH STATE AGAR TIDAK PERLU REFRESHUNTUK MENAMPILKAN DATA BARU
     const [onTambahPrestasi, setOnTambahPrestasi] = useState(false) // STATE UNTUK POPUP FORM TAMBAH BERITA
+    const [onPreviewFilePendukung, setonPreviewFilePendukung] = useState(false)// GETFILE PENDUKUNG
+    const [IndexTabelPrestasi, setIndexTabelPrestasi] = useState(null)
+
 
     // SAVE EDITING NEWS
     const [onSuccesEdit, setOnSuccesEdit] = useState(null)
@@ -38,7 +41,7 @@ const PrestasiSiswa = () => {
     const [deskripsiPrestasi, setDeskripsiPrestasi] = useState(null)
     const [filePendukungPrestasi, setFilePendukungPrestasi] = useState(null)
 
-
+    const [previewFilePendukung, setPreviewFilePendukung] = useState({})
 
     // POST PRESTASI MAN
     async function AddPrestasiMan() {
@@ -90,6 +93,18 @@ const PrestasiSiswa = () => {
         }
         getPrestasiMan()
     }, [refreshData])
+
+    // GET DATA FROM ID TABLE
+    useEffect(() => {
+        const getData = outputPrestasi.find(item => item.id === IndexTabelPrestasi)
+        if (getData) {
+            setPreviewFilePendukung({
+                filePendukung: getData.filePendukung,
+                judulPrestasi: getData.prestasi
+            })
+        }
+    }, [IndexTabelPrestasi, outputPrestasi])
+
 
     async function HandleDeletePrestasi(IdPrestasi) {
         try {
@@ -147,7 +162,7 @@ const PrestasiSiswa = () => {
                                 {/* DESKRIPSI INPUT */}
                                 <div class="mb-6">
                                     <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tingkat</label>
-                                    <input type="text" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e) => setTingkatPrestasi(e.target.value)} placeholder='Kota' />
+                                    <input type="text" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e) => setTingkatPrestasi(e.target.value)} />
                                 </div>
                                 <div class="mb-6">
                                     <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun</label>
@@ -159,7 +174,7 @@ const PrestasiSiswa = () => {
                                 </div>
                                 <div class="mb-6">
                                     <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File Pendukung</label>
-                                    <input type="file" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e) => setDeskripsiPrestasi(e.target.value)} />
+                                    <input type="file" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e) => setFilePendukungPrestasi(e.target.files[0])} />
                                 </div>
                             </>}
                             button={
@@ -171,6 +186,26 @@ const PrestasiSiswa = () => {
                         />
                     </div>
                     <div className='w-full h-full bg-[#00000080] absolute' />
+                </div>
+            )}
+
+            {/* ON PREVIEW FILE PENDUKUNG */}
+            {onPreviewFilePendukung && (
+                <div className='fixed top-0 right-0 w-full h-full z-[50] w-[420px] flex flex-col gap-[16px] items-center justify-center p-[16px]'>
+
+                    <figure class="max-w-lg z-[6] bg-white rounded-lg w-full max-w-[420px] h-fit flex items-center justify-center flex-col p-[16px]">
+                        <img class="h-full max-w-full rounded-lg object-cover" src={previewFilePendukung.filePendukung} alt="image description" />
+                        <figcaption class="mt-[16px] text-sm text-center text-gray-500 dark:text-gray-400">{previewFilePendukung.judulPrestasi}</figcaption>
+                    </figure>
+
+                    <div className='z-[6]'>
+                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" ><a href={`${previewFilePendukung.filePendukung}?fl_attachment=${previewFilePendukung.judulPrestasi}`} download={previewFilePendukung.judulPrestasi} target='_blank'>Download</a></button>
+                        <button type="button" class="text-black bg-white hover:bg-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => setonPreviewFilePendukung(false)}>Tututp</button>
+                    </div>
+
+                    <div className='w-full h-full bg-[#00000080] absolute z-[5]' />
+
+
                 </div>
             )}
 
@@ -202,7 +237,7 @@ const PrestasiSiswa = () => {
                 </div>
 
                 <div className='overflow-x-auto pb-[16px] rounded-lg'>
-                    <div class="relative overflow-x-auto sm:rounded-lg border-r border-l border-b border-[var(--warna-aksen)]" >
+                    <div class="hidden-scroll relative overflow-x-auto rounded-lg border-r border-l border-b border-[var(--warna-aksen)]" >
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" >
                             <thead class="text-sm text-black uppercase bg-[var(--warna-aksen)] dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -223,7 +258,7 @@ const PrestasiSiswa = () => {
                                     </th>
                                     {token && PanelEditPage && (
                                         <th scope="col" class="px-6 py-3">
-                                            Sunting
+
                                         </th>
                                     )}
                                 </tr>
@@ -235,7 +270,7 @@ const PrestasiSiswa = () => {
                                         <td className="px-6 py-4">{item.tingkat === '' || null ? '-' : item.tingkat}</td>
                                         <td className="px-6 py-4">{item.tahun === '' || null ? '-' : item.tahun}</td>
                                         <td className="px-6 py-4">{item.deskripsi === '' || null ? '-' : item.deskripsi}</td>
-                                        <td className="px-6 py-4">{item.filePendukung === '' || null ? '-' : item.filePendukung}</td>
+                                        <td className="px-6 py-4">{item.filePendukung === '' || null ? '-' : <button className='text-[var(--aksen-biru)] font-semibold' onClick={() => { setonPreviewFilePendukung(true); setIndexTabelPrestasi(item.id) }}>Lihat File</button>}</td>
                                         {token && PanelEditPage && (
                                             <td class="px-6 py-4 flex flex-row gap-[16px]">
                                                 <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>

@@ -6,6 +6,7 @@ import { PanelAdminContext } from '../../../Context/ControlPanelAdmin/PanelAdmin
 
 import { PencilIcon } from '../../Icon/ListIcon';
 import { CheckIcon } from '../../Icon/ListIcon';
+import { LoadingEffect } from '../../Icon/ListIcon';
 
 const DataProfile = () => {
     const isMobile = useMediaQuery({ maxWidth: 640 })
@@ -16,6 +17,8 @@ const DataProfile = () => {
     const { token, setToken } = useContext(GetTokenContext)
     const { PanelEditPage, setPanelEditPage } = useContext(PanelAdminContext) // ON EDIT PANEL ADMIN
     const [onSuccesCopyState, setonSuccesCopyState] = useState(false)
+    const [onLoading, setOnLoading] = useState(false) // ONLOADING STATE
+
 
     // STATE EDITING
     const [onEditTentang, setOnEditTentang] = useState(false)
@@ -29,6 +32,7 @@ const DataProfile = () => {
     const [backupValueTentang, setBackupValueTentang] = useState(null)
     async function HandlePatchProfileDataTentang() {
         try {
+            setOnLoading(true)
             const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
                 method: "PATCH",
                 headers: {
@@ -44,6 +48,8 @@ const DataProfile = () => {
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOnLoading(false)
         }
 
     }
@@ -52,6 +58,7 @@ const DataProfile = () => {
     const [backupValueAkre, setBackupValueAkre] = useState(null)
     async function HandlePatchProfileDataAkre() {
         try {
+            setOnLoading(true)
             const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
                 method: "PATCH",
                 headers: {
@@ -67,6 +74,8 @@ const DataProfile = () => {
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOnLoading(false)
         }
     }
 
@@ -74,6 +83,7 @@ const DataProfile = () => {
     const [backupValueAlamat, setBackupValueAlamat] = useState(null)
     async function HandlePatchProfileDataAlamat() {
         try {
+            setOnLoading(true)
             const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
                 method: "PATCH",
                 headers: {
@@ -89,6 +99,8 @@ const DataProfile = () => {
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOnLoading(false)
         }
     }
 
@@ -96,6 +108,7 @@ const DataProfile = () => {
     const [backupValueNSM, setBackupValueNSM] = useState(null)
     async function HandlePatchProfileDataNSM() {
         try {
+            setOnLoading(true)
             const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
                 method: "PATCH",
                 headers: {
@@ -112,6 +125,8 @@ const DataProfile = () => {
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOnLoading(false)
         }
     }
 
@@ -119,6 +134,7 @@ const DataProfile = () => {
     const [backupValueNPSM, setBackupValueNPSM] = useState(null)
     async function HandlePatchProfileDataNPSM() {
         try {
+            setOnLoading(true)
             const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/profiledata`, {
                 method: "PATCH",
                 headers: {
@@ -134,6 +150,8 @@ const DataProfile = () => {
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOnLoading(false)
         }
     }
 
@@ -196,6 +214,15 @@ const DataProfile = () => {
 
     return (
         <>
+
+            {/* POPUP LOADING */}
+            {onLoading && (
+                <SuccessPopup
+                    heading={<LoadingEffect text={'Loading..'} />}
+                    subHeading={"Data sedang dikirim ke Database. mohon tunggu, pastikan koneksi internet stabil"}
+                />
+            )}
+
             {/* POPUP SUKSES UPDATE */}
             {onSuccesEditState && (
                 <SuccessPopup
@@ -257,7 +284,7 @@ const DataProfile = () => {
                                         <CheckIcon
                                             sizeOnPx={20}
                                             color={"#005eff"} />
-                                        <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataTentang}>Simpan</p>
+                                        <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={() => { HandlePatchProfileDataTentang(); setOnEditTentang(false) }}>Simpan</p>
                                     </span>
                                     <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setTentang(backupValueTentang); setOnEditTentang(false); }}>Cancle</p>
                                 </div>
@@ -297,7 +324,7 @@ const DataProfile = () => {
                                                     <CheckIcon
                                                         sizeOnPx={20}
                                                         color={"#005eff"} />
-                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataAkre}>Simpan</p>
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={() => { HandlePatchProfileDataAkre(); setOnEditAkreditasi(false) }}>Simpan</p>
                                                 </span>
                                                 <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setAkreditasi(backupValueAkre); setOnEditAkreditasi(false) }}>Cancle</p>
                                             </div>
@@ -324,7 +351,7 @@ const DataProfile = () => {
                                         <li>
                                             <span className='w-full flex flex-row items-center justify-between' >
                                                 <p>Alamat</p>
-                                                <input type='text' className='text-[var(--text-primary)] py-[4px] px-[16px] w-[50%]' value={alamat} style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setAlamat(e.target.value)} />
+                                                <input type='text' className='text-[var(--text-primary)] py-[4px] px-[16px] w-[50%]' autoFocus value={alamat} style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setAlamat(e.target.value)} />
                                             </span>
                                             {/* BUTTON EDIT */}
                                             <div className=' w-fit flex flex-row gap-[16px] items-center pl-[32px]'>
@@ -332,7 +359,7 @@ const DataProfile = () => {
                                                     <CheckIcon
                                                         sizeOnPx={20}
                                                         color={"#005eff"} />
-                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataAlamat}>Simpan</p>
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={() => { HandlePatchProfileDataAlamat(); setOnEditAlamat(false) }}>Simpan</p>
                                                 </span>
                                                 <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setAlamat(backupValueAlamat); setOnEditAlamat(false); }}>Cancle</p>
                                             </div>
@@ -358,7 +385,7 @@ const DataProfile = () => {
                                         <li>
                                             <span className='w-full flex flex-row items-center justify-between'>
                                                 <p>NSM (Nomor Statistik Madrasah)</p>
-                                                <input type='text' value={nsm} className='text-[var(--text-primary)] py-[4px] px-[16px]' style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setNsm(e.target.value)} />
+                                                <input type='text' value={nsm} className='text-[var(--text-primary)] py-[4px] px-[16px]' autoFocus style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setNsm(e.target.value)} />
                                             </span>
                                             {/* BUTTON EDIT */}
                                             <div className=' w-fit flex flex-row gap-[16px] items-center pl-[32px]'>
@@ -366,7 +393,7 @@ const DataProfile = () => {
                                                     <CheckIcon
                                                         sizeOnPx={20}
                                                         color={"#005eff"} />
-                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataNSM}>Simpan</p>
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={() => { HandlePatchProfileDataNSM(); setOnEditNSM(false) }}>Simpan</p>
                                                 </span>
                                                 <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setNsm(backupValueNSM); setOnEditNSM(false); }}>Cancle</p>
                                             </div>
@@ -392,7 +419,7 @@ const DataProfile = () => {
                                         <li>
                                             <span className='w-full flex flex-row items-center justify-between'>
                                                 <p>NPSN (Nomor Pokok Sekolah Nasional)</p>
-                                                <input type='text' className='text-[var(--text-primary)] px-[16px] py-[4px]' value={npsm} style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setNpsm(e.target.value)} />
+                                                <input type='text' className='text-[var(--text-primary)] px-[16px] py-[4px]' value={npsm} autoFocus style={{ outline: '1px solid var(--warna-aksen)', overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: "nowrap " }} onChange={(e) => setNpsm(e.target.value)} />
                                             </span>
                                             {/* BUTTON EDIT */}
                                             <div className=' w-fit flex flex-row gap-[16px] items-center pl-[32px]'>
@@ -400,7 +427,7 @@ const DataProfile = () => {
                                                     <CheckIcon
                                                         sizeOnPx={20}
                                                         color={"#005eff"} />
-                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={HandlePatchProfileDataNPSM}>Simpan</p>
+                                                    <p className='font-[inter] text-white text-xs sm:text-sm ' onClick={() => { HandlePatchProfileDataNPSM(); setOnEditNPSM(false) }}>Simpan</p>
                                                 </span>
                                                 <p className='text-xs sm:text-sm text-[var(--text-primary)] cursor-pointer underline' onClick={() => { setNpsm(backupValueNPSM); setOnEditNPSM(false); }}>Cancle</p>
                                             </div>
@@ -421,6 +448,8 @@ const DataProfile = () => {
                                             </div>
                                         </li>
                                     )}
+
+
 
                                 </ul>
                             </div>
