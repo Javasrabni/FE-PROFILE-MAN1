@@ -347,7 +347,7 @@ export const SuccessPopup = ({ heading, subHeading, button }) => {
                 type: "spring", // Menambahkan efek pantulan
                 stiffness: 150, // Menentukan kekuatan pantulan
             }} // Efek lebih smooth
-            className='fixed bottom-[64px] right-[32px] z-[50] w-[420px] h-fit bg-[var(--card)] rounded-xl p-[16px]'
+            className='fixed bottom-[64px] right-[32px] z-[52] w-[420px] h-fit bg-[var(--card)] rounded-xl p-[16px]'
             style={{ outline: '1.5px solid var(--warna-aksen)' }}
         >
             <span className='flex flex-col gap-[8px]'>

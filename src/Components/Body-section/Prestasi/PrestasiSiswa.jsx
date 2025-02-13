@@ -54,7 +54,7 @@ const PrestasiSiswa = () => {
             if (deskripsiPrestasi) { newData.append('deskripsi', deskripsiPrestasi) }
             if (filePendukungPrestasi) { newData.append('file', filePendukungPrestasi) }
 
-            const response = await fetch(`${process.env.REACT_APP_BE_URL}/post/adm/prestasiman`, {
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/post/adm/prestasi_siswa_man`, {
                 method: "POST",
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -80,7 +80,7 @@ const PrestasiSiswa = () => {
     useEffect(() => {
         const getPrestasiMan = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BE_URL}/get/adm/prestasiman`, {
+                const response = await fetch(`${process.env.REACT_APP_BE_URL}/get/adm/prestasi_siswa_man`, {
                     method: 'GET'
                 })
                 if (response.ok) {
@@ -267,10 +267,10 @@ const PrestasiSiswa = () => {
                                 {outputPrestasi.map((item, index) =>
                                     <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-50" onClick={() => console.log(item.id)}>
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
-                                        <td className="px-6 py-4">{item.tingkat === '' || null ? '-' : item.tingkat}</td>
-                                        <td className="px-6 py-4">{item.tahun === '' || null ? '-' : item.tahun}</td>
-                                        <td className="px-6 py-4">{item.deskripsi === '' || null ? '-' : item.deskripsi}</td>
-                                        <td className="px-6 py-4">{item.filePendukung === '' || null ? '-' : <button className='text-[var(--aksen-biru)] font-semibold' onClick={() => { setonPreviewFilePendukung(true); setIndexTabelPrestasi(item.id) }}>Lihat File</button>}</td>
+                                        <td className="px-6 py-4">{item.tingkat ? item.tingkat : '-'}</td>
+                                        <td className="px-6 py-4">{item.tahun ? item.tahun : '-'}</td>
+                                        <td className="px-6 py-4">{item.deskripsi ? item.deskripsi : '-'}</td>
+                                        <td className="px-6 py-4">{item.filePendukung ? <button className='text-[var(--aksen-biru)] font-semibold' onClick={() => { setonPreviewFilePendukung(true); setIndexTabelPrestasi(item.id) }}>Lihat File</button> : '-'}</td>
                                         {token && PanelEditPage && (
                                             <td class="px-6 py-4 flex flex-row gap-[16px]">
                                                 <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>

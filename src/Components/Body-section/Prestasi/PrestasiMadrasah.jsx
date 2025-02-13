@@ -7,6 +7,8 @@ import { PanelAdminContext } from '../../../Context/ControlPanelAdmin/PanelAdmin
 
 import { SuccessPopup } from '../Landing/LandingPage'
 import { LoadingEffect } from '../../Icon/ListIcon'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export const PrestasiMadrasah = () => {
     // CONTEXT TO SAVE / GET TOKEN
@@ -194,7 +196,18 @@ export const PrestasiMadrasah = () => {
                 <div className='fixed top-0 right-0 w-full h-full z-[50] w-[420px] flex flex-col gap-[16px] items-center justify-center p-[16px]'>
 
                     <figure class="max-w-lg z-[6] bg-white rounded-lg w-full max-w-[420px] h-fit flex items-center justify-center flex-col p-[16px]">
-                        <img class="h-full max-w-full rounded-lg object-cover" src={previewFilePendukung.filePendukung} alt="image description" />
+                        {previewFilePendukung.filePendukung ? (
+                            <img class="h-full max-w-full rounded-lg object-cover" src={previewFilePendukung.filePendukung} alt="image description" />
+                        ) : (
+
+                            <div role="status" class="space-y-8 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center">
+                                <div class="flex items-center justify-center w-full h-48 bg-gray-300 rounded-sm sm:w-96 dark:bg-gray-700">
+                                    <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                                        <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        )}
                         <figcaption class="mt-[16px] text-sm text-center text-gray-500 dark:text-gray-400">{previewFilePendukung.judulPrestasi}</figcaption>
                     </figure>
 
@@ -216,8 +229,8 @@ export const PrestasiMadrasah = () => {
                     {token && PanelEditPage ? (
                         <>
                             <div>
-                                <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Siswa</h1>
-                                <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh siswa MAN 1 Kota Tangerang</p>
+                                <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Madrasah</h1>
+                                <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh MAN 1 Kota Tangerang</p>
                             </div>
                             <div className=' w-fit flex flex-row gap-[16px] items-center'>
                                 <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={() => setOnTambahPrestasi(true)}>
@@ -230,8 +243,8 @@ export const PrestasiMadrasah = () => {
                         </>
                     ) : (
                         <div>
-                            <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Siswa</h1>
-                            <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh siswa MAN 1 Kota Tangerang</p>
+                            <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Madrasah</h1>
+                            <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh MAN 1 Kota Tangerang</p>
                         </div>
                     )}
                 </div>
@@ -240,51 +253,66 @@ export const PrestasiMadrasah = () => {
                     <div class="hidden-scroll relative overflow-x-auto rounded-lg border-r border-l border-b border-[var(--warna-aksen)]" >
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" >
                             <thead class="text-sm text-black uppercase bg-[var(--warna-aksen)] dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Prestasi
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Tingkat
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Tahun
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Deskripsi
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        File Pendukung
-                                    </th>
-                                    {token && PanelEditPage && (
-                                        <th scope="col" class="px-6 py-3">
+                                {outputPrestasi && outputPrestasi.length > 0 ? (
+                                    <>
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">
+                                                Prestasi
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Tingkat
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Tahun
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Deskripsi
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                File Pendukung
+                                            </th>
+                                            {token && PanelEditPage && (
+                                                <th scope="col" class="px-6 py-3">
 
-                                        </th>
-                                    )}
-                                </tr>
+                                                </th>
+                                            )}
+                                        </tr>
+                                    </>
+                                ) : (
+                                    <tr>
+                                        <th scope="col" className="px-6 py-3 text-center">Prestasi Madrasah</th>
+                                    </tr>
+                                )}
                             </thead>
                             <tbody>
-                                {outputPrestasi.map((item, index) =>
-                                    <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-50" onClick={() => console.log(item.id)}>
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
-                                        <td className="px-6 py-4">{item.tingkat === '' || null ? '-' : item.tingkat}</td>
-                                        <td className="px-6 py-4">{item.tahun === '' || null ? '-' : item.tahun}</td>
-                                        <td className="px-6 py-4">{item.deskripsi === '' || null ? '-' : item.deskripsi}</td>
-                                        <td className="px-6 py-4">{item.filePendukung === '' || null ? '-' : <button className='text-[var(--aksen-biru)] font-semibold' onClick={() => { setonPreviewFilePendukung(true); setIndexTabelPrestasi(item.id) }}>Lihat File</button>}</td>
-                                        {token && PanelEditPage && (
-                                            <td class="px-6 py-4 flex flex-row gap-[16px]">
-                                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                                <a href="#" class="font-medium text-red-600 dark:text-blue-500 hover:underline">Hapus</a>
-                                            </td>
-                                        )}
-                                        {/* <td className="border border-gray-300 px-4 py-2">
+                                {outputPrestasi && outputPrestasi.length > 0 ? (
+                                    <>
+                                        {outputPrestasi.map((item, index) =>
+                                            <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-50" onClick={() => console.log(item.id)}>
+                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
+                                                <td className="px-6 py-4">{item.tingkat ? item.tingkat : '-'}</td>
+                                                <td className="px-6 py-4">{item.tahun ? item.tahun : '-'}</td>
+                                                <td className="px-6 py-4">{item.deskripsi ? item.deskripsi : '-'}</td>
+                                                <td className="px-6 py-4">{item.filePendukung ? <button className='text-[var(--aksen-biru)] font-semibold' onClick={() => { setonPreviewFilePendukung(true); setIndexTabelPrestasi(item.id) }}>Lihat File</button> : '-'}</td>
+                                                {token && PanelEditPage && (
+                                                    <td class="px-6 py-4 flex flex-row gap-[16px]">
+                                                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                                        <a href="#" class="font-medium text-red-600 dark:text-blue-500 hover:underline">Hapus</a>
+                                                    </td>
+                                                )}
+                                                {/* <td className="border border-gray-300 px-4 py-2">
                                 <div className='flex flex-row items-center'>
                                     <button className='bg-[green] w-full h-full text-white p-[4px]'>Edit</button>
                                     <button className='bg-[tomato] w-full h-full text-white p-[4px]' onClick={() => HandleDeletePrestasi(item.id)}>Delete</button>
                                 </div>
                             </td> */}
-
-                                    </tr>
+                                            </tr>
+                                        )}
+                                    </>
+                                ) : (
+                                    <>
+                                        <td><Skeleton count={outputPrestasi?.length || 2} height={40} width={'100%'} /></td>
+                                    </>
                                 )}
                             </tbody>
                         </table>
