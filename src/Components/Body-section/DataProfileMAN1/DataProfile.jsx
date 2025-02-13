@@ -226,6 +226,7 @@ const DataProfile = () => {
             {/* POPUP SUKSES UPDATE */}
             {onSuccesEditState && (
                 <SuccessPopup
+                    autoClose={true}
                     heading={"Berhasil Update!"}
                     subHeading={onSuccesEdit}
                     button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setOnSuccesEditState(false)}>Tutup</button>}
@@ -236,6 +237,7 @@ const DataProfile = () => {
             {/* POPUP SUKSES COPY */}
             {onSuccesCopyState && (
                 <SuccessPopup
+                    autoClose={true}
                     heading={"Berhasil disalin"}
                     subHeading={onCopyText}
                     button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setonSuccesCopyState(false)}>Tutup</button>}

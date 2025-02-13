@@ -137,6 +137,7 @@ const LandingPage = () => {
             {/* POPUP SUKSES UPDATE */}
             {onSuccesEditState && (
                 <SuccessPopup
+                    autoClose={true}
                     heading={"Berhasil Update!"}
                     subHeading={onSuccesEdit}
                     button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setOnSuccesEditState(false)}>Tutup</button>}
@@ -335,7 +336,12 @@ const LandingPage = () => {
 export default LandingPage
 
 
-export const SuccessPopup = ({ heading, subHeading, button }) => {
+export const SuccessPopup = ({ heading, subHeading, button, autoClose }) => {
+    const [time, setTime] = useState(6)
+    useEffect(() => {
+        const interval = setInterval(() => setTime(prev => prev - 1), 1000)
+        return () => clearInterval(interval)
+    }, [])
     return (
         <motion.div
             initial={{ x: 100, opacity: 0 }}  // Muncul dari kanan
@@ -353,7 +359,12 @@ export const SuccessPopup = ({ heading, subHeading, button }) => {
             <span className='flex flex-col gap-[8px]'>
                 <p className='font-[inter] text-sm sm:text-base font-medium'>{heading}</p>
                 <p className='font-[inter] text-xs sm:text-sm '>{subHeading}</p>
-                <span>{button}</span>
+                <span className='flex flex-row gap-[16px] items-center'>
+                    <span>{button}</span>
+                    {autoClose && (
+                        <p className='font-[inter] text-xs sm:text-sm text-[var(--text-secondary)]'>Tertutup dalam {time}</p>
+                    )}
+                </span>
             </span>
         </motion.div>
     )

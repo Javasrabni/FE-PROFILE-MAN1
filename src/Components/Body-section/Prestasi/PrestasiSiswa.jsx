@@ -8,6 +8,9 @@ import { PanelAdminContext } from '../../../Context/ControlPanelAdmin/PanelAdmin
 import { SuccessPopup } from '../Landing/LandingPage'
 import { LoadingEffect } from '../../Icon/ListIcon'
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 const PrestasiSiswa = () => {
     // CONTEXT TO SAVE / GET TOKEN
     const { token, setToken } = useContext(GetTokenContext)
@@ -40,8 +43,11 @@ const PrestasiSiswa = () => {
     const [tahunPrestasi, setTahunPrestasi] = useState(null)
     const [deskripsiPrestasi, setDeskripsiPrestasi] = useState(null)
     const [filePendukungPrestasi, setFilePendukungPrestasi] = useState(null)
+    const [namaFilePendukungPrestasi, setNamaFilePendukungPrestasi] = useState(null)
 
     const [previewFilePendukung, setPreviewFilePendukung] = useState({})
+
+    const [onEditPrestasi, setOnEditPrestasi] = useState(false)
 
     // POST PRESTASI MAN
     async function AddPrestasiMan() {
@@ -52,7 +58,7 @@ const PrestasiSiswa = () => {
             if (tingkatPrestasi) { newData.append('tingkat', tingkatPrestasi) }
             if (tahunPrestasi) { newData.append('tahun', tahunPrestasi) }
             if (deskripsiPrestasi) { newData.append('deskripsi', deskripsiPrestasi) }
-            if (filePendukungPrestasi) { newData.append('file', filePendukungPrestasi) }
+            if (filePendukungPrestasi) { newData.append('file', filePendukungPrestasi); newData.append('namaFilePendukung', namaFilePendukungPrestasi) }
 
             const response = await fetch(`${process.env.REACT_APP_BE_URL}/post/adm/prestasi_siswa_man`, {
                 method: "POST",
@@ -96,7 +102,7 @@ const PrestasiSiswa = () => {
 
     // GET DATA FROM ID TABLE
     useEffect(() => {
-        const getData = outputPrestasi.find(item => item.id === IndexTabelPrestasi)
+        const getData = outputPrestasi?.find(item => item.id === IndexTabelPrestasi)
         if (getData) {
             setPreviewFilePendukung({
                 filePendukung: getData.filePendukung,
@@ -107,15 +113,23 @@ const PrestasiSiswa = () => {
 
 
     async function HandleDeletePrestasi(IdPrestasi) {
+        const confirm = window.confirm('Yakin ingin menghapus?')
         try {
-            const response = await fetch(`${process.env.REACT_APP_BE_URL}/user/${IdPrestasi}`, {
-                method: 'DELETE',
-            })
-            if (response.ok) {
-                // outputDataPeserta((prev => prev.filter(item => item.id !== IdPeserta)))
-                const updatedData = await fetch(`${process.env.REACT_APP_BE_URL}/user`);
-                const newData = await updatedData.json();
-                setOutputPrestasi(newData); // Update state dengan data terbaru
+            if (!confirm) {
+                return
+            } else {
+                const response = await fetch(`${process.env.REACT_APP_BE_URL}/del/adm/prestasi_siswa`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }, body: JSON.stringify({ Id: IdPrestasi })
+                })
+                if (response.ok) {
+                    const data = await response.json()
+                    console.log(data)
+                    setOutputPrestasi(prev => prev.filter(item => item.id !== IdPrestasi)); // Update state dengan data terbaru
+                }
             }
         } catch (error) {
             console.error(error)
@@ -129,6 +143,60 @@ const PrestasiSiswa = () => {
         } else {
             setOnTambahPrestasi(false)
         }
+    }
+
+    // HANDLE PATCH PRESTASI SISWA
+    const [PatchJudulPrestasi, setPatchJudulPrestasi] = useState(null)
+    const [PatchTingkatPrestasi, setPatchTingkatPrestasi] = useState(null)
+    const [PatchTahunPrestasi, setPatchTahunPrestasi] = useState(null)
+    const [PatchDeskripsiPrestasi, setPatchDeskripsiPrestasi] = useState(null)
+    const [PatchFilePendukungPrestasi, setPatchFilePendukungPrestasi] = useState(null)
+    const [PatchNamaFilePendukungPrestasi, setPatchNamaFilePendukungPrestasi] = useState(null)
+
+    useEffect(() => {
+        const GetIndex = outputPrestasi?.find(item => item.id === IndexTabelPrestasi)
+        if (GetIndex) {
+            setPatchJudulPrestasi(GetIndex.prestasi)
+            setPatchTingkatPrestasi(GetIndex.tingkat)
+            setPatchTahunPrestasi(GetIndex.tahun)
+            setPatchDeskripsiPrestasi(GetIndex.deskripsi)
+            setPatchFilePendukungPrestasi(GetIndex.filePendukung)
+            setPatchNamaFilePendukungPrestasi(GetIndex.namaFilePendukung)
+        }
+    }, [IndexTabelPrestasi, outputPrestasi])
+
+    async function UpdatePrestasiMan() {
+        setOnLoading(true)
+        try {
+            const newForm = new FormData()
+            if (PatchJudulPrestasi) { newForm.append('prestasi', PatchJudulPrestasi) }
+            if (PatchTingkatPrestasi) { newForm.append('tingkat', PatchTingkatPrestasi) }
+            if (PatchTahunPrestasi) { newForm.append('tahun', PatchTahunPrestasi) }
+            if (PatchDeskripsiPrestasi) { newForm.append('deskripsi', PatchDeskripsiPrestasi) }
+            if (PatchFilePendukungPrestasi) { newForm.append('file', PatchFilePendukungPrestasi) }
+            if (PatchNamaFilePendukungPrestasi) { newForm.append('namaFilePendukung', PatchNamaFilePendukungPrestasi) }
+            newForm.append('Id', IndexTabelPrestasi)
+
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/patch/adm/prestasi_siswa`, {
+                method: "PATCH",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }, body: newForm
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setOnEditPrestasi(false)
+                setOnSuccesEdit(data.msg)
+                setOnSuccesEditState(true)
+                setRefreshData(prev => !prev)
+                setIndexTabelPrestasi(null)
+            }
+        } catch (err) {
+            console.error(err)
+        } finally {
+            setOnLoading(false)
+        }
+
     }
     return (
         <>
@@ -145,6 +213,7 @@ const PrestasiSiswa = () => {
                 <SuccessPopup
                     heading={"Berhasil Update!"}
                     subHeading={onSuccesEdit}
+                    autoClose={true}
                     button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setOnSuccesEditState(false)}>Tutup</button>}
 
                 />
@@ -174,7 +243,7 @@ const PrestasiSiswa = () => {
                                 </div>
                                 <div class="mb-6">
                                     <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File Pendukung</label>
-                                    <input type="file" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e) => setFilePendukungPrestasi(e.target.files[0])} />
+                                    <input type="file" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e) => { setFilePendukungPrestasi(e.target.files[0]); setNamaFilePendukungPrestasi(e.target.files[0].name) }} />
                                 </div>
                             </>}
                             button={
@@ -189,24 +258,96 @@ const PrestasiSiswa = () => {
                 </div>
             )}
 
-            {/* ON PREVIEW FILE PENDUKUNG */}
-            {onPreviewFilePendukung && (
-                <div className='fixed top-0 right-0 w-full h-full z-[50] w-[420px] flex flex-col gap-[16px] items-center justify-center p-[16px]'>
+            {onEditPrestasi && (
+                <div className='fixed top-0 left-0 z-[50] w-full h-full flex items-center justify-center'>
+                    <div className='z-[4] w-full h-full flex items-center justify-center' >
+                        <FormTambahBerita
+                            InputField={<>
+                                <div className='mb-6'>
+                                    <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prestasi</label>
+                                    <input type="text" id="small-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={PatchJudulPrestasi} onChange={(e) => setPatchJudulPrestasi(e.target.value)} />
+                                </div>
 
-                    <figure class="max-w-lg z-[6] bg-white rounded-lg w-full max-w-[420px] h-fit flex items-center justify-center flex-col p-[16px]">
-                        <img class="h-full max-w-full rounded-lg object-cover" src={previewFilePendukung.filePendukung} alt="image description" />
-                        <figcaption class="mt-[16px] text-sm text-center text-gray-500 dark:text-gray-400">{previewFilePendukung.judulPrestasi}</figcaption>
-                    </figure>
+                                {/* DESKRIPSI INPUT */}
+                                <div class="mb-6">
+                                    <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tingkat</label>
+                                    <input type="text" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={PatchTingkatPrestasi} onChange={(e) => setPatchTingkatPrestasi(e.target.value)} />
+                                </div>
+                                <div class="mb-6">
+                                    <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun</label>
+                                    <input type='text' id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={PatchTahunPrestasi} onChange={(e) => setPatchTahunPrestasi(e.target.value)} />
+                                </div>
+                                <div class="mb-6">
+                                    <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                    <textarea type="text" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={PatchDeskripsiPrestasi} onChange={(e) => setPatchDeskripsiPrestasi(e.target.value)} />
+                                </div>
+                                <div class="mb-6">
+                                    <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File Pendukung</label>
+                                    <input type="file" id="large-input" className="outline-none block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e) => { setPatchFilePendukungPrestasi(e.target.files[0]); setPatchNamaFilePendukungPrestasi(e.target.files[0].name) }} />
+                                    {PatchFilePendukungPrestasi && (
+                                        <label for="large-input" className='block mt-2 text-sm font-medium text-gray-900 dark:text-white'>File saat ini: {PatchNamaFilePendukungPrestasi}</label>
+                                    )}
+                                </div>
+                            </>}
+                            button={
+                                <>
+                                    <button className='text-black bg-[var(--card)] hover:bg-[var(--bg-secondary)] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' onClick={() => { HandleCancleAddPrestasi(); setOnEditPrestasi(false); setIndexTabelPrestasi(null) }}>Cancle</button>
+                                    <button type="submit" class="text-white bg-[var(--aksen-biru)] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={UpdatePrestasiMan}>Update</button>
+                                </>
+                            }
+                        />
 
-                    <div className='z-[6]'>
-                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" ><a href={`${previewFilePendukung.filePendukung}?fl_attachment=${previewFilePendukung.judulPrestasi}`} download={previewFilePendukung.judulPrestasi} target='_blank'>Download</a></button>
-                        <button type="button" class="text-black bg-white hover:bg-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => setonPreviewFilePendukung(false)}>Tututp</button>
                     </div>
-
-                    <div className='w-full h-full bg-[#00000080] absolute z-[5]' />
-
+                    <div className='w-full h-full bg-[#00000080] absolute' />
 
                 </div>
+            )}
+
+            {/* ON PREVIEW FILE PENDUKUNG */}
+            {onPreviewFilePendukung && (
+                <div className="fixed top-0 right-0 w-full h-full z-[50] flex flex-col gap-[16px] items-center justify-center p-[16px]">
+                    <div className='w-full max-w-lg rounded-lg h-full max-h-[360px] bg-white z-[6] p-[16px]'>
+                        <figure className="w-full rounded-lg h-full flex items-center justify-center flex-col p-[16px] gap-[8px]">
+                            <img
+                                className="h-full w-full rounded-lg object-contain"
+                                src={previewFilePendukung.filePendukung}
+                                alt="image description"
+                            />
+                            <figcaption className=" text-sm text-center text-gray-500 dark:text-gray-400">
+                                {previewFilePendukung.judulPrestasi}
+                            </figcaption>
+                        </figure>
+
+                    </div>
+
+                    <div className="z-[6]">
+                        <button
+                            type="button"
+                            className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        >
+                            <a
+                                href={`${previewFilePendukung.filePendukung}?fl_attachment=${previewFilePendukung.judulPrestasi}`}
+                                download={previewFilePendukung.judulPrestasi}
+                                target="_blank"
+                            >
+                                Download
+                            </a>
+                        </button>
+                        <button
+                            type="button"
+                            className="text-black bg-white hover:bg-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            onClick={() => {
+                                setonPreviewFilePendukung(false);
+                                setIndexTabelPrestasi(null);
+                            }}
+                        >
+                            Tutup
+                        </button>
+                    </div>
+
+                    <div className="w-full h-full bg-[#00000080] absolute z-[5]" />
+                </div>
+
             )}
 
 
@@ -240,51 +381,66 @@ const PrestasiSiswa = () => {
                     <div class="hidden-scroll relative overflow-x-auto rounded-lg border-r border-l border-b border-[var(--warna-aksen)]" >
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" >
                             <thead class="text-sm text-black uppercase bg-[var(--warna-aksen)] dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Prestasi
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Tingkat
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Tahun
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Deskripsi
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        File Pendukung
-                                    </th>
-                                    {token && PanelEditPage && (
-                                        <th scope="col" class="px-6 py-3">
+                                {outputPrestasi && outputPrestasi.length > 0 ? (
+                                    <>
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">
+                                                Prestasi
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Tingkat
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Tahun
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Deskripsi
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                File Pendukung
+                                            </th>
+                                            {token && PanelEditPage && (
+                                                <th scope="col" class="px-6 py-3">
 
-                                        </th>
-                                    )}
-                                </tr>
+                                                </th>
+                                            )}
+                                        </tr>
+                                    </>
+                                ) : (
+                                    <tr>
+                                        <th scope="col" className="px-6 py-3 text-center">Prestasi Siswa</th>
+                                    </tr>
+                                )}
                             </thead>
                             <tbody>
-                                {outputPrestasi.map((item, index) =>
-                                    <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-50" onClick={() => console.log(item.id)}>
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
-                                        <td className="px-6 py-4">{item.tingkat ? item.tingkat : '-'}</td>
-                                        <td className="px-6 py-4">{item.tahun ? item.tahun : '-'}</td>
-                                        <td className="px-6 py-4">{item.deskripsi ? item.deskripsi : '-'}</td>
-                                        <td className="px-6 py-4">{item.filePendukung ? <button className='text-[var(--aksen-biru)] font-semibold' onClick={() => { setonPreviewFilePendukung(true); setIndexTabelPrestasi(item.id) }}>Lihat File</button> : '-'}</td>
-                                        {token && PanelEditPage && (
-                                            <td class="px-6 py-4 flex flex-row gap-[16px]">
-                                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                                <a href="#" class="font-medium text-red-600 dark:text-blue-500 hover:underline">Hapus</a>
-                                            </td>
+                                {outputPrestasi && outputPrestasi.length > 0 ? (
+                                    <>
+                                        {outputPrestasi.map((item, index) =>
+                                            <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-50" onClick={() => console.log(item.id)}>
+                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
+                                                <td className="px-6 py-4">{item.tingkat ? item.tingkat : '-'}</td>
+                                                <td className="px-6 py-4">{item.tahun ? item.tahun : '-'}</td>
+                                                <td className="px-6 py-4">{item.deskripsi ? item.deskripsi : '-'}</td>
+                                                <td className="px-6 py-4">{item.filePendukung ? <button className='text-[var(--aksen-biru)] font-semibold' onClick={() => { setonPreviewFilePendukung(true); setIndexTabelPrestasi(item.id) }}>Lihat File</button> : '-'}</td>
+                                                {token && PanelEditPage && (
+                                                    <td class="px-6 py-4 flex flex-row gap-[16px]">
+                                                        <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={() => { setOnEditPrestasi(true); setIndexTabelPrestasi(item.id) }}>Edit</button>
+                                                        <button className="font-medium text-red-600 dark:text-blue-500 hover:underline" onClick={() => HandleDeletePrestasi(item.id)}>Hapus</button>
+                                                    </td>
+                                                )}
+                                                {/* <td className="border border-gray-300 px-4 py-2">
+                                                                <div className='flex flex-row items-center'>
+                                                                    <button className='bg-[green] w-full h-full text-white p-[4px]'>Edit</button>
+                                                                    <button className='bg-[tomato] w-full h-full text-white p-[4px]' onClick={() => HandleDeletePrestasi(item.id)}>Delete</button>
+                                                                </div>
+                                                            </td> */}
+                                            </tr>
                                         )}
-                                        {/* <td className="border border-gray-300 px-4 py-2">
-                                <div className='flex flex-row items-center'>
-                                    <button className='bg-[green] w-full h-full text-white p-[4px]'>Edit</button>
-                                    <button className='bg-[tomato] w-full h-full text-white p-[4px]' onClick={() => HandleDeletePrestasi(item.id)}>Delete</button>
-                                </div>
-                            </td> */}
-
-                                    </tr>
+                                    </>
+                                ) : (
+                                    <>
+                                        <td><Skeleton count={outputPrestasi?.length || 2} height={40} width={'100%'} /></td>
+                                    </>
                                 )}
                             </tbody>
                         </table>
