@@ -119,8 +119,8 @@ const Home = () => {
                     </div>
                 </main>
 
-                <footer className='w-full h-full py-[32px] px-[65px] flex flex-col gap-[12px] bg-[var(--card)] gap-[32px]'>
-                    <div className='flex flex-row items-center justify-around gap-[32px]'>
+                <footer className='w-full h-full py-[32px] p-[16px] sm:px-[65px] flex flex-col gap-[12px] bg-[var(--card)] gap-[32px]'>
+                    <div className='flex flex-col sm:flex-row items-center justify-around gap-[32px]'>
 
                         {/* LOGO MAN */}
                         {/* <div className="w-[30px] h-[30px] sm:w-[150px] sm:h-[150px]">
@@ -133,7 +133,7 @@ const Home = () => {
                         </div> */}
 
                         {/* FIELD PERTANYAAN */}
-                        <div className='max-w-[40%] w-full sm:w-full h-full'>
+                        <div className='w-full sm:max-w-[30%] h-full'>
                             <FieldPertanyaan />
                         </div>
 

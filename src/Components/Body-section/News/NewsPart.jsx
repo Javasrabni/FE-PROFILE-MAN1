@@ -141,6 +141,33 @@ const NewsPart = () => {
         }
     }
 
+    async function HandleDeleteNews(IdNews) {
+        const confirm = window.confirm('Yakin ingin menghapus?')
+        try {
+            if (!confirm) {
+                return
+            } else {
+                const response = await fetch(`${process.env.REACT_APP_BE_URL}/del/adm/newslanding`, {
+                    method: "DELETE",
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }, body: JSON.stringify({ Id: IdNews })
+                })
+
+                if (response.ok) {
+                    const data = await response.json()
+                    setOnSuccesEdit(data.msg)
+                    setOnSuccesEditState(true)
+                    setRefreshDataNews(prev => !prev)
+                }
+            }
+        } catch (err) {
+            console.error(err)
+        }
+
+    }
+
     function HandlePreviewAddImgPopupNews(event) {
         const getFile = event.target.files[0]
         if (getFile) {
@@ -431,12 +458,16 @@ const NewsPart = () => {
                                                             </span>
 
                                                             {/* BUTTON EDIT BERITA */}
-                                                            <div className=''>
+                                                            <div className='flex flex-row gap-[16px] items-center'>
                                                                 <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] rounded-lg py-[6px] px-[16px]' onClick={() => { setOnEditNewsLanding(prev => !prev); setOnEditingNewsLanding(item.id) }}>
                                                                     <PencilIcon
                                                                         sizeOnPx={20}
                                                                         color={"#005eff"} />
                                                                     <p className='font-[inter] text-white text-xs sm:text-sm '>Edit</p>
+                                                                </span>
+                                                                <span>
+                                                                    <button className="font-medium text-red-600 dark:text-blue-500 hover:underline text-sm" onClick={() => HandleDeleteNews(item.id)}>Hapus</button>
+
                                                                 </span>
                                                             </div>
                                                         </div>
