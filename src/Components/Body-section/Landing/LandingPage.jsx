@@ -286,7 +286,7 @@ const LandingPage = () => {
                                 ) : (
                                     <div className='w-full h-full relative flex flex-row items-center justify-center'>
                                         <span className='px-[16px] py-[6px]' style={{ outline: '1px solid #005eff' }}>
-                                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={() => navigateTo('/userRegister')} >{buttonLanding}</button>
+                                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={() => navigateTo('/snpdb')} >{buttonLanding}</button>
 
                                         </span>
 
@@ -305,7 +305,7 @@ const LandingPage = () => {
 
                             </span>
                         ) : (
-                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={() => navigateTo('/userRegister')}>{buttonLanding}</button>
+                            <button className='bg-[var(--warna-aksen)] px-[16px] py-[12px] rounded-xl text-[var(--bg-primary)] hover:bg-[var(--second-aksen)] font-semibold' onClick={() => navigateTo('/snpdb')}>{buttonLanding}</button>
 
                         )}
 

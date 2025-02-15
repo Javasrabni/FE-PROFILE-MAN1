@@ -26,6 +26,9 @@ export const PrestasiMadrasah = () => {
     // SAVE EDITING NEWS
     const [onSuccesEdit, setOnSuccesEdit] = useState(null)
     const [onSuccesEditState, setOnSuccesEditState] = useState(false)
+    const [onError, setOnError] = useState(null)
+    const [onErrorState, setOnErrorState] = useState(false)
+
     useEffect(() => {
         if (onSuccesEditState) {
             const delay = setTimeout(() => {
@@ -72,9 +75,15 @@ export const PrestasiMadrasah = () => {
                 setOnSuccesEdit(data.msg)
                 setOnSuccesEditState(true)
                 setRefreshData(prev => !prev)
+            } else {
+                const data = await response.json()
+                setOnError(data.msg)
+                setOnErrorState(true)
             }
         } catch (err) {
             console.error(err)
+            setOnError(err.message)
+            setOnErrorState(true)
         } finally {
             setOnLoading(false)
         }
@@ -132,10 +141,18 @@ export const PrestasiMadrasah = () => {
                     setOnSuccesEditState(true)
                     setRefreshData(prev => !prev)
                     setIndexTabelPrestasi(null)
+                } else {
+                    const data = await response.json()
+                    setOnError(data.msg)
+                    setOnErrorState(true)
                 }
             }
         } catch (error) {
             console.error(error)
+            setOnError(error.message)
+            setOnErrorState(true)
+        } finally {
+            setOnErrorState(false)
         }
     }
 
@@ -193,11 +210,19 @@ export const PrestasiMadrasah = () => {
                 setOnSuccesEditState(true)
                 setRefreshData(prev => !prev)
                 setIndexTabelPrestasi(null)
+            } else {
+                const data = await response.json()
+                console.log(data)
+                setOnError(data.msg)
+                setOnErrorState(true)
             }
         } catch (err) {
             console.error(err)
+            setOnError(`Terjadi Kesalahan:` + err.message)
+            setOnErrorState(true)
         } finally {
             setOnLoading(false)
+            setTimeout(() => setOnErrorState(false), 6000)
         }
 
     }
@@ -218,6 +243,16 @@ export const PrestasiMadrasah = () => {
                     subHeading={onSuccesEdit}
                     autoClose={true}
                     button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setOnSuccesEditState(false)}>Tutup</button>}
+
+                />
+            )}
+
+            {onErrorState && (
+                <SuccessPopup
+                    heading={"Terjadi Kesalahan Sistem"}
+                    subHeading={onError}
+                    autoClose={true}
+                    button={<button className='bg-[var(--text-primary)] w-fit h-fit py-[6px] px-[16px] rounded-lg text-white text-xs sm:text-sm' onClick={() => setOnErrorState(false)}>Tutup</button>}
 
                 />
             )}
@@ -361,7 +396,7 @@ export const PrestasiMadrasah = () => {
                         <>
                             <div>
                                 <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Madrasah</h1>
-                                <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh siswa MAN 1 Kota Tangerang</p>
+                                <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh MAN 1 Kota Tangerang</p>
                             </div>
                             <div className=' w-fit flex flex-row gap-[16px] items-center'>
                                 <span className='w-fit h-fit flex flex-row items-center gap-[8px] cursor-pointer bg-[var(--text-primary)] py-[6px] px-[16px] rounded-lg relative' onClick={() => setOnTambahPrestasi(true)}>
@@ -374,8 +409,8 @@ export const PrestasiMadrasah = () => {
                         </>
                     ) : (
                         <div>
-                            <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Siswa</h1>
-                            <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh siswa MAN 1 Kota Tangerang</p>
+                            <h1 className='text-[18px] sm:text-xl font-bold leading-[1]'>Prestasi Madrasah</h1>
+                            <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular">Pencapaian prestasi yang didapat oleh MAN 1 Kota Tangerang</p>
                         </div>
                     )}
                 </div>

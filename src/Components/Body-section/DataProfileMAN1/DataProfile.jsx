@@ -204,11 +204,13 @@ const DataProfile = () => {
     const [onCopyText, setOnCopyText] = useState(null)
     async function CopyData(nameField, value) {
         try {
-            await navigator.clipboard.writeText(value)
             setonSuccesCopyState(true)
+            await navigator.clipboard.writeText(value)
             setOnCopyText(`${nameField} Berhasil disalin!`)
         } catch (err) {
             console.error(err)
+        } finally {
+            setTimeout(()=> setonSuccesCopyState(false), 6000)
         }
     }
 
