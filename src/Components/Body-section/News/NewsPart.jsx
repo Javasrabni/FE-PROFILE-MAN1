@@ -498,13 +498,13 @@ const NewsPart = () => {
                                                 <div className='p-[16px]  w-full flex flex-col gap-[16px]'>
                                                     <span className='flex flex-col gap-[4px]'>
                                                         <h1 className='text-base sm:text-base font-bold line-clamp-2'>{item.judulBerita}</h1>
-                                                        <p className="text-sm sm:text-sm text-[var(--text-secondary)] font-regular line-clamp-4">
+                                                        <p className="text-sm sm:text-[16px] text-[var(--text-secondary)] font-regular line-clamp-4">
                                                             {item.deskripsi}
                                                         </p>
 
                                                     </span>
                                                     <span>
-                                                        <p className='text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
+                                                        <p className='text-sm sm:text-md text-[var(--text-secondary)] font-regular'>Terakhir diupdate: {item.updatedAt.slice(0, 10)}</p>
                                                     </span>
                                                 </div>
 

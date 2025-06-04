@@ -464,13 +464,13 @@ const DataProfile = () => {
                 ) : (
                     <>
                         <span >
-                            <p className=' w-full text-sm sm:text-sm text-[var(--text-secondary)]'>{tentang}</p>
+                            <p className=' w-full text-sm sm:text-base text-[var(--text-secondary)]'>{tentang}</p>
                         </span>
 
                         <div className='w-full h-full flex flex-row items-center gap-[16px] mt-[32px] ' >
 
                             <div className='w-full h-full pt-[16px]' style={{ borderTop: '1px solid var(--border)' }}>
-                                <ul className='data-sekolah w-full h-full flex flex-col gap-[12px] text-sm sm:text-sm text-[var(--text-secondary)] font-regular'>
+                                <ul className='data-sekolah w-full h-full flex flex-col gap-[12px] text-sm sm:text-base text-[var(--text-secondary)] font-regular'>
                                     <li>
                                         <span className='w-full flex flex-row items-center justify-between'>
                                             <p>Akreditasi</p>

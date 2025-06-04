@@ -7,6 +7,8 @@ import { PrestasiMadrasah } from '../Components/Body-section/Prestasi/PrestasiMa
 import PrestasiSiswa from '../Components/Body-section/Prestasi/PrestasiSiswa'
 import FieldPertanyaan from '../Components/Body-section/Question/fieldPertanyaan'
 import { useContext } from 'react'
+import { useRef } from 'react'
+import '../App.css'
 
 // CONTEXT
 import { GetTokenContext } from '../Components/Auth/GetTokenContext'
@@ -33,6 +35,10 @@ const Home = () => {
     const { PanelEditPage, setPanelEditPage } = useContext(PanelAdminContext)
 
 
+    // Ref into div
+    const NavLanding = useRef()
+    const NavTentang = useRef()
+    const NavKontak = useRef()
 
     return (
         <>
@@ -99,27 +105,28 @@ const Home = () => {
                 />
             )} */}
 
+
             <div>
-                <Header />
+                <Header NavTentang={NavTentang} NavKontak={NavKontak} NavLanding={NavLanding}/>
                 <main className='w-full h-full w-full max-w-[67.5rem] m-auto p-[16px] flex flex-col gap-[12px] pb-[60px]'>
-                    <div>
+                    <div ref={NavLanding}>
                         <LandingPage />
                     </div>
                     <div>
                         <NewsPart />
                     </div>
-                    <div>
+                    <div ref={NavTentang}>
                         <DataProfile />
                     </div>
                     <div>
                         <PrestasiMadrasah />
                     </div>
-                    <div>
+                    {/* <div>
                         <PrestasiSiswa />
-                    </div>
+                    </div> */}
                 </main>
 
-                <footer className='w-full h-full py-[32px] p-[16px] sm:px-[65px] flex flex-col gap-[12px] bg-[var(--card)] gap-[32px]'>
+                <footer ref={NavKontak} className='w-full h-full py-[32px] p-[16px] sm:px-[65px] flex flex-col gap-[12px] bg-[var(--card)] gap-[32px]'>
                     <div className='flex flex-col sm:flex-row items-center justify-around gap-[32px]'>
 
                         {/* LOGO MAN */}

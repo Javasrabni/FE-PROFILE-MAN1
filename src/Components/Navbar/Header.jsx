@@ -4,7 +4,7 @@ import { HamburgerMenu } from '../Icon/ListIcon'
 import NavigatePage from '../Navigate/useNavigate'
 import { GetTokenContext } from '../Auth/GetTokenContext'
 
-const Header = () => {
+const Header = ({ NavTentang, NavKontak, NavLanding }) => {
     const navigateTo = NavigatePage()
 
     // CONTEXT TO SAVE / GET TOKEN
@@ -50,6 +50,25 @@ const Header = () => {
                 window.location.reload()
             }, 1000)
             return () => clearTimeout(delay)
+        }
+    }
+
+    function navAnchorTentang() {
+        if (NavTentang.current) {
+            const y = NavTentang.current.getBoundingClientRect().top + window.pageYOffset - 81;
+            window.scrollTo({ top: y, behavior: 'smooth' })
+        }
+    }
+    function navAnchorKontak() {
+        if (NavKontak.current) {
+            const y = NavKontak.current.getBoundingClientRect().top + window.pageYOffset - 81
+            window.scrollTo({ top: y, behavior: 'smooth' })
+        }
+    }
+    function navAnchorLanding() {
+        if (NavLanding.current) {
+            const y = NavLanding.current.getBoundingClientRect().top + window.pageYOffset - 81
+            window.scrollTo({ top: y, behavior: 'smooth' })
         }
     }
 
@@ -112,10 +131,10 @@ const Header = () => {
                         </div>
                     ) : (
                         <ul className='navigasi flex flex-row items-center gap-[36px] text-sm sm:text-sm font-medium shrink-0'>
-                            <li onClick={() => navigateTo('/')}>Beranda</li>
-                            <li>Tentang</li>
-                            <li>Kontak</li>
-                            <li>Lokasi</li>
+                            <li onClick={navAnchorLanding}>Beranda</li>
+                            <li onClick={navAnchorTentang}>Tentang</li>
+                            <li onClick={navAnchorKontak}>Kontak</li>
+                            <li onClick={navAnchorKontak}>Lokasi</li>
                             <li onClick={token ? HandleLogOutAdmin : () => navigateTo('/AdminAuth')}>
                                 <span className={`bg-[var(--card)] px-[16px] py-[12px] rounded-xl  ${token ? 'text-[tomato] hover:text-[var(--text-primary)]' : 'text-[var(--text-primary)]'} hover:bg-[var(--second-aksen)] font-bold`}>{token ? <span>LogOut</span> : <span>Log In</span>}</span>
                             </li>

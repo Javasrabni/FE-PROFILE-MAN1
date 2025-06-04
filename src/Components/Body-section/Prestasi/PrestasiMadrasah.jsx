@@ -418,7 +418,7 @@ export const PrestasiMadrasah = () => {
                 <div className='overflow-x-auto pb-[16px] rounded-lg'>
                     <div class="hidden-scroll relative overflow-x-auto rounded-lg border-r border-l border-b border-[var(--warna-aksen)]" >
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" >
-                            <thead class="text-sm text-black uppercase bg-[var(--warna-aksen)] dark:bg-gray-700 dark:text-gray-400">
+                            <thead class="text-sm text-black uppercase bg-[var(--warna-aksen)]">
                                 {outputPrestasi && outputPrestasi.length > 0 ? (
                                     <>
                                         <tr>
@@ -454,8 +454,8 @@ export const PrestasiMadrasah = () => {
                                 {outputPrestasi && outputPrestasi.length > 0 ? (
                                     <>
                                         {outputPrestasi.map((item, index) =>
-                                            <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-50" onClick={() => console.log(item.id)}>
-                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
+                                            <tr key={index} className="odd:bg-white text-black  even:bg-gray-50  border-b border-gray-50" onClick={() => console.log(item.id)}>
+                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.prestasi === '' || null ? '-' : item.prestasi}</th>
                                                 <td className="px-6 py-4">{item.tingkat ? item.tingkat : '-'}</td>
                                                 <td className="px-6 py-4">{item.tahun ? item.tahun : '-'}</td>
                                                 <td className="px-6 py-4">{item.deskripsi ? item.deskripsi : '-'}</td>
