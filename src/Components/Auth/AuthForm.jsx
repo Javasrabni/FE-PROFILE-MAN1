@@ -32,7 +32,7 @@ export const AuthForm = () => {
         setOnLoading(true)
         setAuthStatus(true)
         try {
-            const response = await fetch(`http://localhost:8000/AdminAuth`, {
+            const response = await fetch(`${process.env.REACT_APP_BE_URL}/AdminAuth`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
